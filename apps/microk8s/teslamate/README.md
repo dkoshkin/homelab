@@ -1,0 +1,58 @@
+# Teslamate Setup
+
+This repo contains configuration and instructions on how to run [Teslamate](https://github.com/adriankumpf/teslamate) in [Kubernetes](https://kubernetes.io/) and assumes some prior knowledge of Kubernetes. 
+
+## Prerequisites
+
+* A Kubernetes cluster (tested on a single v1.26.0 Node but any recent version should work)
+* Configured `StorageClass`
+* [Flux](https://fluxcd.io/flux/get-started/) installed and CLI
+* [kubectl](https://kubernetes.io/docs/tasks/tools/#kubectl) CLI
+* [kubeseal](https://github.com/bitnami-labs/sealed-secrets) CLI
+* An [AWS](https://aws.amazon.com/) account to store PostgreSQL backups - see `s3-policy.json` for a minimum S3 policy (replace `<bucket-name`> placeholers)
+* Open port `80` - for [Let's Encrypt](https://letsencrypt.org/)
+* Open port `443` - for Teslamate and Grafana dashboards
+
+## Set Environment Variables
+
+1. Fill out the env file
+
+```bash
+cd <repo>/clusters/microk8s/
+mv .env.sample .env
+source .env
+```
+
+## Setup Grafana
+
+1. Create a `SealedSecret` for Grafana admin auth
+
+```bash
+kubectl create secret generic grafana-admin-auth \
+  --namespace teslamate \
+  --from-literal admin-user=$GRAFANA_USERNAME \
+  --from-literal admin-password=$GRAFANA_PASSWORD \
+  --dry-run=client \
+  -o yaml | \
+kubeseal \
+    --format=yaml \
+    --cert=../../../clusters/microk8s/pub-sealed-secrets.pem \
+    > grafana-admin-auth.yaml
+```
+
+2. Create a `Secret` with PostgreSQL details
+
+```bash
+kubectl create secret generic postgresql-db-auth \
+  --namespace teslamate \
+  --from-literal DATABASE_HOST=cluster-postgresql.postgresql \
+  --from-literal DATABASE_NAME=teslamate \
+  --from-literal DATABASE_USER=$POSTGRES_USERNAME \
+  --from-literal DATABASE_PASS=$POSTGRES_PASSWORD \
+  --dry-run=client \
+  -o yaml | \
+kubeseal \
+    --format=yaml \
+    --cert=../../../clusters/microk8s/pub-sealed-secrets.pem \
+    > postgresql-db-auth.yaml
+```
