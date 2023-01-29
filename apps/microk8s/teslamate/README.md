@@ -23,6 +23,54 @@ mv .env.sample .env
 source .env
 ```
 
+## Setup Teslamate
+
+1. Create a `Secret` with an Encryption key for Teslamate
+
+```bash
+kubectl create secret generic teslamate-ecryption-key \
+  --namespace teslamate \
+  --from-literal ENCRYPTION_KEY=$TESLAMATE_ENCRYPTION_KEY \
+  --dry-run=client \
+  -o yaml | \
+kubeseal \
+    --format=yaml \
+    --cert=../../../clusters/microk8s/pub-sealed-secrets.pem \
+    > secret-teslamate-ecryption-key.yaml
+```
+
+2. Generate a `Secret` for Teslamate admin auth
+
+```bash
+htpasswd -Bbn $TESLAMATE_USERNAME $TESLAMATE_PASSWORD > teslamate-auth
+kubectl create secret generic teslamate-admin-auth \
+  --namespace teslamate \
+  --from-file=auth=teslamate-auth \
+  --dry-run=client \
+  -o yaml | \
+kubeseal \
+    --format=yaml \
+    --cert=../../../clusters/microk8s/pub-sealed-secrets.pem \
+    > secret-teslamate-admin-auth.yaml
+```
+
+3. Create a `Secret` with PostgreSQL details
+
+```bash
+kubectl create secret generic postgresql-db-auth \
+  --namespace teslamate \
+  --from-literal DATABASE_HOST=cluster-postgresql.postgresql \
+  --from-literal DATABASE_NAME=teslamate \
+  --from-literal DATABASE_USER=$POSTGRES_USERNAME \
+  --from-literal DATABASE_PASS=$POSTGRES_PASSWORD \
+  --dry-run=client \
+  -o yaml | \
+kubeseal \
+    --format=yaml \
+    --cert=../../../clusters/microk8s/pub-sealed-secrets.pem \
+    > secret-postgresql-db-auth.yaml
+```
+
 ## Setup Grafana
 
 1. Create a `SealedSecret` for Grafana admin auth
@@ -37,22 +85,6 @@ kubectl create secret generic grafana-admin-auth \
 kubeseal \
     --format=yaml \
     --cert=../../../clusters/microk8s/pub-sealed-secrets.pem \
-    > grafana-admin-auth.yaml
+    > secret-grafana-admin-auth.yaml
 ```
 
-2. Create a `Secret` with PostgreSQL details
-
-```bash
-kubectl create secret generic postgresql-db-auth \
-  --namespace teslamate \
-  --from-literal DATABASE_HOST=cluster-postgresql.postgresql \
-  --from-literal DATABASE_NAME=teslamate \
-  --from-literal DATABASE_USER=$POSTGRES_USERNAME \
-  --from-literal DATABASE_PASS=$POSTGRES_PASSWORD \
-  --dry-run=client \
-  -o yaml | \
-kubeseal \
-    --format=yaml \
-    --cert=../../../clusters/microk8s/pub-sealed-secrets.pem \
-    > postgresql-db-auth.yaml
-```
