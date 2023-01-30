@@ -14,6 +14,13 @@ spec:
         name: postgresql
         namespace: postgresql
       interval: 12h
+  values:
+    primary:
+      initdb:
+        scripts:
+          01-dkoshkin-superuser.sql: |
+            grant all privileges on database teslamate to dkoshkin;
+            ALTER USER dkoshkin WITH SUPERUSER;
   valuesFrom:
   # FIXME: how to create a user after the database is created?
   - kind: Secret
