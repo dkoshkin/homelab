@@ -63,12 +63,77 @@ kubectl create secret generic postgresql-db-auth \
   --from-literal DATABASE_NAME=teslamate \
   --from-literal DATABASE_USER=$POSTGRES_USERNAME \
   --from-literal DATABASE_PASS=$POSTGRES_PASSWORD \
+  --from-literal POSTGRES_HOST=cluster-postgresql.postgresql \
+  --from-literal POSTGRES_DATABASE=teslamate \
+  --from-literal POSTGRES_USER=$POSTGRES_USERNAME \
+  --from-literal POSTGRES_PASSWORD=$POSTGRES_PASSWORD \
   --dry-run=client \
   -o yaml | \
 kubeseal \
     --format=yaml \
     --cert=../../../clusters/microk8s/pub-sealed-secrets.pem \
     > secret-postgresql-db-auth.yaml
+```
+
+4. Create a `Secret` with AWS S3 credentials
+
+```bash
+kubectl create secret generic s3-credentials \
+  --namespace teslamate \
+  --from-literal BACKUP_KEEP_DAYS=7 \
+  --from-literal S3_REGION=us-west-2 \
+  --from-literal S3_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID \
+  --from-literal S3_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY \
+  --from-literal S3_BUCKET=$S3_BUCKET \
+  --from-literal S3_PREFIX=$S3_PREFIX \
+  --dry-run=client \
+  -o yaml | \
+kubeseal \
+    --format=yaml \
+    --cert=../../../clusters/microk8s/pub-sealed-secrets.pem \
+    > secret-s3-credentials.yaml
+```
+
+See sample IAM policy:
+
+```json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": "s3:ListAllMyBuckets",
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:ListBucket",
+                "s3:GetBucketLocation"
+            ],
+            "Resource": "arn:aws:s3:::<bucket-name>"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:PutObject",
+                "s3:PutObjectAcl",
+                "s3:GetObject",
+                "s3:GetObjectAcl",
+                "s3:DeleteObject"
+            ],
+            "Resource": "arn:aws:s3:::<bucket-name>/*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "kms:GenerateDataKey",
+                "kms:Decrypt"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
 ```
 
 ## Setup Grafana
