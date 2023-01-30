@@ -153,3 +153,54 @@ kubeseal \
     > secret-grafana-admin-auth.yaml
 ```
 
+## Restore From a Backup
+
+If you have existing data you can restore it using the following steps.
+
+1. Suspend Flux reconcilation
+
+```bash
+flux suspend -n teslamate helmrelease --all
+```
+
+2. Scale the teslamate `Deployment` to 0
+
+```bash
+kubectl scale deploy -n teslamate teslamate --replicas=0
+```
+
+3. Run the a `Pod` to restore from an AWS S3 backup
+
+```bash
+cat <<EOF | kubectl apply -f -
+apiVersion: v1
+kind: Pod
+metadata:
+  name: teslamate-backup-restore
+  namespace: teslamate
+spec:
+  containers:
+  - name: s3-restore
+    image: eeshugerman/postgres-backup-s3:15
+    command: ['sh', 'restore.sh']
+    envFrom:
+    - secretRef:
+        name: postgresql-db-auth
+    - secretRef:
+        name: s3-credentials
+  restartPolicy: Never
+EOF
+``` 
+
+4. Scale the teslamate `Deployment` back to 1
+
+```bash
+kubectl scale deploy -n teslamate teslamate --replicas=1
+```
+
+5. Resume Flux reconcilation
+
+```bash
+flux resume -n teslamate helmrelease --all
+```
+
