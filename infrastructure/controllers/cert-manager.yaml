@@ -38,15 +38,16 @@ apiVersion: notification.toolkit.fluxcd.io/v1beta2
 kind: Alert
 metadata:
   name: cert-manager
-  namespace: cert-manager
+  namespace: flux-system
 spec:
   summary: "Cluster: microk8s, App: cert-manager"
   providerRef:
     name: slack
-    namespace: flux-system
   eventSeverity: info
   eventSources:
     - kind: Kustomization
       name: 'cert-manager'
+      namespace: cert-manager
     - kind: HelmRelease
       name: 'cert-manager'
+      namespace: cert-manager

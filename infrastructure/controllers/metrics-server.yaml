@@ -38,16 +38,17 @@ apiVersion: notification.toolkit.fluxcd.io/v1beta2
 kind: Alert
 metadata:
   name: metrics-server
-  namespace: metrics-server
+  namespace: flux-system
 spec:
   summary: "Cluster: microk8s, App: metrics-server"
   providerRef:
     name: slack
-    namespace: flux-system
   eventSeverity: info
   eventSources:
     - kind: Kustomization
       name: 'metrics-server'
+      namespace: metrics-server
     - kind: HelmRelease
       name: 'metrics-server'
+      namespace: metrics-server
 

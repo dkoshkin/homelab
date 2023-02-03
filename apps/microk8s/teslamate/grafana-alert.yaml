@@ -3,15 +3,16 @@ apiVersion: notification.toolkit.fluxcd.io/v1beta2
 kind: Alert
 metadata:
   name: grafana
-  namespace: teslamate
+  namespace: flux-system
 spec:
   summary: "Cluster: microk8s, App: grafana"
   providerRef:
     name: slack
-    namespace: flux-system
   eventSeverity: info
   eventSources:
     - kind: Kustomization
       name: 'grafana'
+      namespace: teslamate
     - kind: HelmRelease
       name: 'grafana'
+      namespace: teslamate

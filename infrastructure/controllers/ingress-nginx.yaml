@@ -49,15 +49,16 @@ apiVersion: notification.toolkit.fluxcd.io/v1beta2
 kind: Alert
 metadata:
   name: ingress-nginx
-  namespace: ingress-nginx
+  namespace: flux-system
 spec:
   summary: "Cluster: microk8s, App: ingress-nginx"
   providerRef:
     name: slack
-    namespace: flux-system
   eventSeverity: info
   eventSources:
     - kind: Kustomization
       name: 'ingress-nginx'
+      namespace: ingress-nginx
     - kind: HelmRelease
       name: 'ingress-nginx'
+      namespace: ingress-nginx
