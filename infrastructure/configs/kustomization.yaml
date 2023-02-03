@@ -3,3 +3,4 @@ kind: Kustomization
 resources:
   - cluster-issuer.yaml
   - storage-class.yaml
+  - flux-alert-provider.yaml

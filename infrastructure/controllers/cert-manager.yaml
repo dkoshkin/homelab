@@ -33,3 +33,20 @@ spec:
       interval: 12h
   values:
     installCRDs: true
+---
+apiVersion: notification.toolkit.fluxcd.io/v1beta2
+kind: Alert
+metadata:
+  name: cert-manager
+  namespace: cert-manager
+spec:
+  summary: "Cluster: microk8s, App: cert-manager"
+  providerRef:
+    name: slack
+    namespace: flux-system
+  eventSeverity: info
+  eventSources:
+    - kind: Kustomization
+      name: 'cert-manager'
+    - kind: HelmRelease
+      name: 'cert-manager'

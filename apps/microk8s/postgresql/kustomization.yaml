@@ -6,3 +6,4 @@ resources:
   - secret-db-auth-for-teslamate-values.yaml
   - postgresql-repository.yaml
   - postgresql-release.yaml
+  - postgresql-alert.yaml

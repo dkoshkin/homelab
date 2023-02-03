@@ -1,0 +1,17 @@
+---
+apiVersion: notification.toolkit.fluxcd.io/v1beta2
+kind: Alert
+metadata:
+  name: postgresql
+  namespace: postgresql
+spec:
+  summary: "Cluster: microk8s, App: postgresql"
+  providerRef:
+    name: slack
+    namespace: flux-system
+  eventSeverity: info
+  eventSources:
+    - kind: Kustomization
+      name: 'postgresql'
+    - kind: HelmRelease
+      name: 'cluster-postgresql'

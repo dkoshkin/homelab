@@ -10,6 +10,8 @@ resources:
   - secret-s3-credentials.yaml
   - teslamate-repository.yaml
   - teslamate-release.yaml
+  - teslamate-alert.yaml
   - grfana-repository.yaml
   - grafana-release.yaml
+  - grafana-alert.yaml
 
