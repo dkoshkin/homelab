@@ -13,7 +13,7 @@ spec:
         kind: HelmRepository
         name: postgresql
         namespace: postgresql
-      interval: 12h
+      interval: 1h
   values:
     primary:
       initdb:

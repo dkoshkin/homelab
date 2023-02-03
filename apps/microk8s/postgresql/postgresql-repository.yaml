@@ -4,5 +4,5 @@ metadata:
   name: postgresql
   namespace: postgresql
 spec:
-  interval: 24h
+  interval: 1h
   url: https://charts.bitnami.com/bitnami

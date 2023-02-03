@@ -13,7 +13,7 @@ spec:
         kind: HelmRepository
         name: grafana
         namespace: teslamate
-      interval: 12h
+      interval: 1h
   values:
     admin:
       existingSecret: grafana-admin-auth
