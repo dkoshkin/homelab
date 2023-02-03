@@ -32,7 +32,9 @@ spec:
         namespace: metrics-server
       interval: 1h
   values:
-    installCRDs: true
+    args:
+      # needed in certain clusters
+      - --kubelet-insecure-tls
 ---
 apiVersion: notification.toolkit.fluxcd.io/v1beta2
 kind: Alert
