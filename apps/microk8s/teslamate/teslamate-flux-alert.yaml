@@ -11,8 +11,8 @@ spec:
   eventSeverity: info
   eventSources:
     - kind: Kustomization
-      name: 'teslamate'
+      name: teslamate
       namespace: teslamate
     - kind: HelmRelease
-      name: 'teslamate'
+      name: teslamate
       namespace: teslamate

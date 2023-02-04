@@ -11,8 +11,8 @@ spec:
   eventSeverity: info
   eventSources:
     - kind: Kustomization
-      name: 'postgresql'
+      name: postgresql
       namespace: postgresql
     - kind: HelmRelease
-      name: 'cluster-postgresql'
+      name: cluster-postgresql
       namespace: postgresql
