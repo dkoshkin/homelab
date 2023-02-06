@@ -5,3 +5,5 @@ resources:
   - ingress-nginx.yaml
   - metrics-server.yaml
   - sealed-secrets.yaml
+  - secret-weave-gitops-cluster-user-auth.yaml
+  - weave-gitops-dashboard.yaml
