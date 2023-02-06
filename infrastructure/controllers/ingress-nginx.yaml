@@ -39,9 +39,10 @@ spec:
         enabled: true
       service:
         type: "NodePort"
+      ingressClass: public
       ingressClassResource:
         name: public
-        default: false
+        default: true
     admissionWebhooks:
       enabled: false
 ---
