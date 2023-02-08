@@ -2,8 +2,10 @@ apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
   annotations:
-    storageclass.kubernetes.io/is-default-class: "false"
-  name: microk8s-hostpath-retain
+    storageclass.kubernetes.io/is-default-class: "true"
+  name: hostpath-ssd
 provisioner: microk8s.io/hostpath
 reclaimPolicy: Retain
+parameters:
+  pvDir: /mnt/ssd
 volumeBindingMode: WaitForFirstConsumer

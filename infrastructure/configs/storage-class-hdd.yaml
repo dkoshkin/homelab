@@ -3,7 +3,9 @@ kind: StorageClass
 metadata:
   annotations:
     storageclass.kubernetes.io/is-default-class: "false"
-  name: microk8s-hostpath-retain
+  name: hostpath-hdd
 provisioner: microk8s.io/hostpath
 reclaimPolicy: Retain
+parameters:
+  pvDir: /mnt/hdd
 volumeBindingMode: WaitForFirstConsumer
