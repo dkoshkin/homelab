@@ -8,7 +8,7 @@ spec:
   chart:
     spec:
       chart: ./
-      version: '*'
+      version: "*"
       sourceRef:
         kind: GitRepository
         name: teslamate
