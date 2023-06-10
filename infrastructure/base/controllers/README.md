@@ -10,7 +10,7 @@ mv .env.sample .env
 source .env
 ```
 
-## Setup Teslamate
+## Setup Weave Gitops
 
 ```bash
 kubectl create secret generic cluster-user-auth \
@@ -24,4 +24,3 @@ kubeseal \
     --cert=../../clusters/microk8s/pub-sealed-secrets.pem \
     > secret-weave-gitops-cluster-user-auth.yaml
 ```
-

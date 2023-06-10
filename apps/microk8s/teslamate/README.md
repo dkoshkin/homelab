@@ -203,4 +203,3 @@ kubectl scale deploy -n teslamate teslamate --replicas=1
 ```bash
 flux resume -n teslamate helmrelease --all
 ```
-
