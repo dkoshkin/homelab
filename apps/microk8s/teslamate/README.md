@@ -143,8 +143,8 @@ See sample IAM policy:
 ```bash
 kubectl create secret generic grafana-admin-auth \
   --namespace teslamate \
-  --from-literal admin-user=$GRAFANA_USERNAME \
-  --from-literal admin-password=$GRAFANA_PASSWORD \
+  --from-literal admin-user=$TESLAMATE_GRAFANA_USERNAME \
+  --from-literal admin-password=$TESLAMATE_GRAFANA_PASSWORD \
   --dry-run=client \
   -o yaml | \
 kubeseal \
