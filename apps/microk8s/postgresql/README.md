@@ -28,7 +28,7 @@ kubectl create secret generic db-auth-for-teslamate \
   -o yaml | \
 kubeseal \
     --format=yaml \
-    --cert=../../../clusters/microk8s/pub-sealed-secrets.pem \
+    --cert=$SEALED_SECRET_CERT \
     > secret-db-auth-for-teslamate-values.yaml && \
 rm -rf db-auth-for-teslamate-values.yaml
 ```

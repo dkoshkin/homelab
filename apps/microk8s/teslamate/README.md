@@ -35,7 +35,7 @@ kubectl create secret generic teslamate-ecryption-key \
   -o yaml | \
 kubeseal \
     --format=yaml \
-    --cert=../../../clusters/microk8s/pub-sealed-secrets.pem \
+    --cert=$SEALED_SECRET_CERT \
     > secret-teslamate-ecryption-key.yaml
 ```
 
@@ -50,7 +50,7 @@ kubectl create secret generic teslamate-admin-auth \
   -o yaml | \
 kubeseal \
     --format=yaml \
-    --cert=../../../clusters/microk8s/pub-sealed-secrets.pem \
+    --cert=$SEALED_SECRET_CERT \
     > secret-teslamate-admin-auth.yaml
 ```
 
@@ -71,7 +71,7 @@ kubectl create secret generic postgresql-db-auth \
   -o yaml | \
 kubeseal \
     --format=yaml \
-    --cert=../../../clusters/microk8s/pub-sealed-secrets.pem \
+    --cert$SEALED_SECRET_CERT \
     > secret-postgresql-db-auth.yaml
 ```
 
@@ -90,7 +90,7 @@ kubectl create secret generic s3-credentials \
   -o yaml | \
 kubeseal \
     --format=yaml \
-    --cert=../../../clusters/microk8s/pub-sealed-secrets.pem \
+    --cert=$SEALED_SECRET_CERT \
     > secret-s3-credentials.yaml
 ```
 
@@ -149,7 +149,7 @@ kubectl create secret generic grafana-admin-auth \
   -o yaml | \
 kubeseal \
     --format=yaml \
-    --cert=../../../clusters/microk8s/pub-sealed-secrets.pem \
+    --cert=$SEALED_SECRET_CERT\
     > secret-grafana-admin-auth.yaml
 ```
 

@@ -21,6 +21,6 @@ kubectl create secret generic cluster-user-auth \
   -o yaml | \
 kubeseal \
     --format=yaml \
-    --cert=../../clusters/microk8s/pub-sealed-secrets.pem \
+    --cert=$SEALED_SECRET_CERT \
     > secret-weave-gitops-cluster-user-auth.yaml
 ```
