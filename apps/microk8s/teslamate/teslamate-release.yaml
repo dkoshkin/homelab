@@ -23,7 +23,7 @@ spec:
       enabled: true
       ingressClassName: public
       annotations:
-        cert-manager.io/cluster-issuer: letsencrypt
+        cert-manager.io/cluster-issuer: letsencrypt-http
         nginx.ingress.kubernetes.io/auth-type: basic
         nginx.ingress.kubernetes.io/auth-secret: teslamate-admin-auth
         nginx.ingress.kubernetes.io/auth-realm: 'Login to Teslamate'

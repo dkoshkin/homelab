@@ -36,7 +36,7 @@ spec:
         enabled: true
         ingressClassName: public
         annotations:
-          cert-manager.io/cluster-issuer: letsencrypt-cloudflare
+          cert-manager.io/cluster-issuer: letsencrypt-http-cloudflare
         hosts:
         - grafana-microk8s.dimitrikoshkin.com
         tls:
