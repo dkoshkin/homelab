@@ -37,7 +37,7 @@ spec:
       enabled: true
       ingressClassName: public
       annotations:
-        cert-manager.io/cluster-issuer: letsencrypt-http
+        cert-manager.io/cluster-issuer: letsencrypt-cloudflare
       path: /grafana
       hosts:
       - teslamate.dimitrikoshkin.com

@@ -44,7 +44,7 @@ spec:
       enabled: true
       className: public
       annotations:
-        cert-manager.io/cluster-issuer: letsencrypt-http
+        cert-manager.io/cluster-issuer: letsencrypt-cloudflare
       hosts:
       - host: gitops-microk8s.dimitrikoshkin.com
         paths:
