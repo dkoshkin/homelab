@@ -6,7 +6,7 @@
 
 ```bash
 kubectl create secret generic cloudflare-api-token \
-  --namespace teslamate \
+  --namespace cert-manager \
   --from-literal api-token=$CLOUDFLARE_API_TOKEN \
   --dry-run=client \
   -o yaml | \
