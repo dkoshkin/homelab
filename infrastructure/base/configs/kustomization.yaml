@@ -4,4 +4,5 @@ resources:
   - cluster-issuer-http.yaml
   - secret-cloudflare-api-token.yaml
   - cluster-issuer-cloudflare.yaml
+  - cluster-issuer-selfsigned.yaml
   - flux-alert-provider.yaml
