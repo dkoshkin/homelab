@@ -1,0 +1,7 @@
+{
+    "kubernetes_deb_version": "1.26.6-00",
+    "kubernetes_rpm_version": "1.26.6-0",
+    "kubernetes_semver": "v1.26.6",
+    "kubernetes_series": "v1.26",
+    "disk_size": "81920"
+}

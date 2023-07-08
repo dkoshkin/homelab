@@ -1,0 +1,17 @@
+export EXP_CLUSTER_RESOURCE_SET=true
+export CLUSTER_TOPOLOGY=true
+
+export VSPHERE_SERVER=""
+export VSPHERE_TLS_THUMBPRINT=""
+export VSPHERE_USERNAME=
+export VSPHERE_PASSWORD=
+export VSPHERE_DATACENTER=""
+export VSPHERE_RESOURCE_POOL=""
+export VSPHERE_NETWORK="VM "
+export VSPHERE_DATASTORE=""
+export CLUSTER_CLASS_NAME="vsphere"
+export NAMESPACE=""
+
+# intentionally left blank
+export VSPHERE_SSH_AUTHORIZED_KEY=""
+export VSPHERE_STORAGE_POLICY=""
