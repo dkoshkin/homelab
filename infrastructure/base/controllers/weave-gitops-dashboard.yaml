@@ -46,14 +46,14 @@ spec:
       annotations:
         cert-manager.io/cluster-issuer: letsencrypt-cloudflare
       hosts:
-      - host: gitops-microk8s.dimitrikoshkin.com
+      - host: gitops-${cluster_name}.dimitrikoshkin.com
         paths:
         - path: /
           pathType: ImplementationSpecific
       tls:
-      - secretName: gitops-microk8s.dimitrikoshkin.com-tls
+      - secretName: gitops-${cluster_name}.dimitrikoshkin.com-tls
         hosts:
-        - gitops-microk8s.dimitrikoshkin.com
+        - gitops-${cluster_name}.dimitrikoshkin.com
 ---
 apiVersion: notification.toolkit.fluxcd.io/v1beta2
 kind: Alert

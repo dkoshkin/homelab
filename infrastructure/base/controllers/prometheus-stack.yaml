@@ -38,11 +38,11 @@ spec:
         annotations:
           cert-manager.io/cluster-issuer: letsencrypt-cloudflare
         hosts:
-        - grafana-microk8s.dimitrikoshkin.com
+        - grafana-${cluster_name}.dimitrikoshkin.com
         tls:
-        - secretName: grafana-microk8s.dimitrikoshkin.com-tls
+        - secretName: grafana-${cluster_name}.dimitrikoshkin.com-tls
           hosts:
-          - grafana-microk8s.dimitrikoshkin.com
+          - grafana-${cluster_name}.dimitrikoshkin.com
 ---
 apiVersion: notification.toolkit.fluxcd.io/v1beta2
 kind: Alert

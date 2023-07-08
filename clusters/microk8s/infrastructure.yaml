@@ -34,6 +34,9 @@ spec:
     name: flux-system
   path: ./infrastructure/base/configs
   prune: true
+  postBuild:
+    substitute:
+      cluster_name: "microk8s"
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
