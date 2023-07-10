@@ -36,7 +36,7 @@ spec:
       hostPort:
         enabled: true
       service:
-        type: "NodePort"
+        type: "${ingress_service_type:=LoadBalancer}"
       ingressClass: public
       ingressClassResource:
         name: public
