@@ -46,14 +46,14 @@ spec:
       annotations:
         cert-manager.io/cluster-issuer: letsencrypt-cloudflare
       hosts:
-      - host: gitops-${cluster_name}.dimitrikoshkin.com
+      - host: gitops-${CLUSTER_NAME}.dimitrikoshkin.com
         paths:
         - path: /
           pathType: ImplementationSpecific
       tls:
-      - secretName: gitops-${cluster_name}.dimitrikoshkin.com-tls
+      - secretName: gitops-${CLUSTER_NAME}.dimitrikoshkin.com-tls
         hosts:
-        - gitops-${cluster_name}.dimitrikoshkin.com
+        - gitops-${CLUSTER_NAME}.dimitrikoshkin.com
 ---
 apiVersion: notification.toolkit.fluxcd.io/v1beta2
 kind: Alert
@@ -61,7 +61,7 @@ metadata:
   name: weave-gitops-dashboard
   namespace: flux-system
 spec:
-  summary: "Cluster: ${cluster_name}, App: weave-gitops-dashboard"
+  summary: "Cluster: ${CLUSTER_NAME}, App: weave-gitops-dashboard"
   providerRef:
     name: slack
   eventSeverity: info

@@ -38,11 +38,11 @@ spec:
         annotations:
           cert-manager.io/cluster-issuer: letsencrypt-cloudflare
         hosts:
-        - grafana-${cluster_name}.dimitrikoshkin.com
+        - grafana-${CLUSTER_NAME}.dimitrikoshkin.com
         tls:
-        - secretName: grafana-${cluster_name}.dimitrikoshkin.com-tls
+        - secretName: grafana-${CLUSTER_NAME}.dimitrikoshkin.com-tls
           hosts:
-          - grafana-${cluster_name}.dimitrikoshkin.com
+          - grafana-${CLUSTER_NAME}.dimitrikoshkin.com
 ---
 apiVersion: notification.toolkit.fluxcd.io/v1beta2
 kind: Alert
@@ -50,7 +50,7 @@ metadata:
   name: prometheus-stack
   namespace: flux-system
 spec:
-  summary: "Cluster: ${cluster_name}, App: prometheus-stack"
+  summary: "Cluster: ${CLUSTER_NAME}, App: prometheus-stack"
   providerRef:
     name: slack
   eventSeverity: info

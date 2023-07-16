@@ -40,7 +40,7 @@ metadata:
   name: metrics-server
   namespace: flux-system
 spec:
-  summary: "Cluster: ${cluster_name}, App: metrics-server"
+  summary: "Cluster: ${CLUSTER_NAME}, App: metrics-server"
   providerRef:
     name: slack
   eventSeverity: info

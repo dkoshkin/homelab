@@ -13,5 +13,5 @@ kubectl create secret generic cloudflare-api-token \
 kubeseal \
     --format=yaml \
     --cert=$SEALED_SECRET_CERT \
-    > secret-cloudflare-api-token.yaml
+    > infrastructure/base/configs/secret-cloudflare-api-token.yaml
 ```

@@ -50,7 +50,7 @@ metadata:
   name: ingress-nginx
   namespace: flux-system
 spec:
-  summary: "Cluster: ${cluster_name}, App: ingress-nginx"
+  summary: "Cluster: ${CLUSTER_NAME}, App: ingress-nginx"
   providerRef:
     name: slack
   eventSeverity: info

@@ -1,15 +1,5 @@
 #  Cluster Controllers Setup
 
-## Set Environment Variables
-
-1. Fill out the env file
-
-```bash
-cd <repo>/clusters/microk8s/
-mv .env.sample .env
-source .env
-```
-
 ## Setup Weave Gitops
 
 ```bash
@@ -22,7 +12,7 @@ kubectl create secret generic cluster-user-auth \
 kubeseal \
     --format=yaml \
     --cert=$SEALED_SECRET_CERT \
-    > secret-weave-gitops-cluster-user-auth.yaml
+    > infrastructure/base/controllers/secret-weave-gitops-cluster-user-auth.yaml
 ```
 
 ## Setup Prometheus Grafana
@@ -38,5 +28,5 @@ kubectl create secret generic prometheus-stack-grafana \
 kubeseal \
     --format=yaml \
     --cert=$SEALED_SECRET_CERT \
-    > secret-prometheus-stack-grafana.yaml
+    > infrastructure/base/controllers/secret-prometheus-stack-grafana.yaml
 ```

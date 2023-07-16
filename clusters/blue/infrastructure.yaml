@@ -16,7 +16,7 @@ spec:
   wait: true
   postBuild:
     substitute:
-      CLUSTER_NAME: "microk8s"
+      CLUSTER_NAME: "blue"
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
@@ -37,8 +37,8 @@ spec:
   wait: true
   postBuild:
     substitute:
-      CLUSTER_NAME: "microk8s"
-      ingress_service_type: "NodePort"
+      CLUSTER_NAME: "blue"
+      KUBE_VIP_IP_RANGE: "192.168.69.201-192.168.69.209"
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
@@ -58,21 +58,4 @@ spec:
   prune: true
   postBuild:
     substitute:
-      CLUSTER_NAME: "microk8s"
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
-kind: Kustomization
-metadata:
-  name: infra-microk8s-configs
-  namespace: flux-system
-spec:
-  dependsOn:
-  - name: infra-controllers
-  interval: 1h
-  retryInterval: 1m
-  timeout: 5m
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-  path: ./infrastructure/microk8s/configs
-  prune: true
+      CLUSTER_NAME: "blue"
