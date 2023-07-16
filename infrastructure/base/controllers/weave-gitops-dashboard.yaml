@@ -61,7 +61,7 @@ metadata:
   name: weave-gitops-dashboard
   namespace: flux-system
 spec:
-  summary: "Cluster: microk8s, App: weave-gitops-dashboard"
+  summary: "Cluster: ${cluster_name}, App: weave-gitops-dashboard"
   providerRef:
     name: slack
   eventSeverity: info

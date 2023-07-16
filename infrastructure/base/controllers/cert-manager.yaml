@@ -38,7 +38,7 @@ metadata:
   name: cert-manager
   namespace: flux-system
 spec:
-  summary: "Cluster: microk8s, App: cert-manager"
+  summary: "Cluster: ${cluster_name}, App: cert-manager"
   providerRef:
     name: slack
   eventSeverity: info
