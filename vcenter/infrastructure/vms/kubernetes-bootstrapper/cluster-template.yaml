@@ -33,6 +33,8 @@ spec:
             env:
             - name: cp_enable
               value: "true"
+            - name: svc_enable
+              value: "true"
             - name: vip_interface
               value: ${VIP_NETWORK_INTERFACE}
             - name: address
