@@ -43,6 +43,14 @@ spec:
         - secretName: grafana-${CLUSTER_NAME}.dimitrikoshkin.com-tls
           hosts:
           - grafana-${CLUSTER_NAME}.dimitrikoshkin.com
+    prometheus:
+      prometheusSpec:
+        storageSpec:
+          volumeClaimTemplate:
+            spec:
+              resources:
+                requests:
+                  storage: 20Gi
 ---
 apiVersion: notification.toolkit.fluxcd.io/v1beta2
 kind: Alert
