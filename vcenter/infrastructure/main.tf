@@ -48,7 +48,7 @@ resource "null_resource" "kubernetes-image-builder" {
 
   provisioner "remote-exec" {
     inline = [
-      "mkdir ${local.direcotires.kubernetes-image-builder.destination}",
+      "mkdir -p ${local.direcotires.kubernetes-image-builder.destination}",
     ]
   }
 
@@ -89,7 +89,7 @@ resource "null_resource" "kubernetes-bootstrapper" {
 
   provisioner "remote-exec" {
     inline = [
-      "mkdir ${local.direcotires.kubernetes-bootstrapper.destination}",
+      "mkdir -p ${local.direcotires.kubernetes-bootstrapper.destination}",
     ]
   }
   provisioner "file" {
@@ -107,6 +107,14 @@ resource "null_resource" "kubernetes-bootstrapper" {
   provisioner "file" {
     source      = "${local.direcotires.kubernetes-bootstrapper.source}/cluster-template.yaml"
     destination = "${local.direcotires.kubernetes-bootstrapper.destination}/cluster-template.yaml"
+  }
+  provisioner "file" {
+    source      = "${local.direcotires.kubernetes-bootstrapper.source}/slack-url-secret.yaml"
+    destination = "${local.direcotires.kubernetes-bootstrapper.destination}/slack-url-secret.yaml"
+  }
+  provisioner "file" {
+    source      = "${local.direcotires.kubernetes-bootstrapper.source}/sealed-secret.yaml"
+    destination = "${local.direcotires.kubernetes-bootstrapper.destination}/sealed-secret.yaml"
   }
   provisioner "remote-exec" {
     inline = [

@@ -26,3 +26,7 @@ crash.log
 
 # Exclude Kubernetes admin configuration files
 kubernetes/clusters/*.conf
+
+# Exclude Kubernetes sealed secrets cert Secert
+vcenter/infrastructure/vms/kubernetes-bootstrapper/*-secret.yaml
+vcenter/infrastructure/vms/kubernetes-bootstrapper/pub-sealed-secrets.pem

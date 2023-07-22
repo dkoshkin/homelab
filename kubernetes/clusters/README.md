@@ -1,4 +1,6 @@
-# Create a management cluster
+# Clusters
+
+## Create a management cluster
 
 1.  Create the bootstrap cluster
     
@@ -64,7 +66,7 @@
     kind delete cluster
     ```
 
-# Create additonal clusters
+## Create additonal clusters
 
 1.  Export cluster specific environment variables:
 
@@ -98,11 +100,44 @@
     kubectl --kubeconfig=$(pwd)/kubernetes-bootstrapper/$CLUSTER_NAME.conf apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.24.1/manifests/calico.yaml
     ```
 
-# Bootstrap Flux
+## Create a Required Secrets
+
+1.  Create the `flux-system` namespace:
+
+    ```
+    kubectl create \
+    --kubeconfig=$(pwd)/kubernetes-bootstrapper/$CLUSTER_NAME.conf \
+    namespace flux-system
+    ```
+
+https://github.com/bitnami-labs/sealed-secrets
+
+Reuse the same certificate key pair to share Secrets across multiple clusters.
+
+1.  Create the Sealed Secrets Secret:
+
+    ```
+    kubectl create \
+    --kubeconfig=$(pwd)/kubernetes-bootstrapper/$CLUSTER_NAME.conf \
+    -f $(pwd)/kubernetes-bootstrapper/sealed-secret.yaml
+    ```
+
+1.  Create a Slack Notifier Secret:
+
+    ```
+    kubectl create \
+    --kubeconfig=$(pwd)/kubernetes-bootstrapper/$CLUSTER_NAME.conf \
+    -f $(pwd)/kubernetes-bootstrapper/slack-url-secret.yaml
+    ```
+
+## Bootstrap Flux
+
+https://github.com/fluxcd/flux2
 
 1.  Export Github token:
 
     ```
+    export CLUSTER_NAME=blue
     export GITHUB_TOKEN=<your-token>
     ```
 

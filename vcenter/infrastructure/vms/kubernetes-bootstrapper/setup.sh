@@ -28,3 +28,10 @@ rm -rf clusterctl
 
 printf "\nInstalling Flux CLI https://fluxcd.io/flux/cmd/\n"
 curl -s https://fluxcd.io/install.sh | sudo bash
+
+printf "\nInstalling Sealed Secret CLI https://github.com/bitnami-labs/sealed-secrets#linux\n"
+sudo rm -rf /usr/local/bin/kubeseal
+wget https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.22.0/kubeseal-0.22.0-linux-amd64.tar.gz
+tar -xvzf kubeseal-0.22.0-linux-amd64.tar.gz kubeseal
+sudo install -m 755 kubeseal /usr/local/bin/kubeseal
+rm -rf kubeseal-0.22.0-linux-amd64.tar.gz kubeseal
