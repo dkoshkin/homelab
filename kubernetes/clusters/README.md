@@ -20,7 +20,7 @@
 
     ```sh
     export CLUSTER_NAME=blue
-    export VSPHERE_FOLDER=/$VSPHERE_DATACENTER/vm/Kubernetes/Clusters/Blue
+    export VSPHERE_FOLDER=/$VSPHERE_DATACENTER/vm/Kubernetes/Clusters/$CLUSTER_NAME
     export KUBERNETES_VERSION=v1.26.6
     export CPI_IMAGE_K8S_VERSION=v1.26.2
     export VSPHERE_TEMPLATE=photon-4-kube-$KUBERNETES_VERSION

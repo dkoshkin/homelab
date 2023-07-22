@@ -136,6 +136,8 @@ spec:
     name: vsphere-csi-node
   - kind: ConfigMap
     name: vsphere-csi-controller
+  - kind: ConfigMap
+    name: vsphere-csi-storageclass
   - kind: Secret
     name: cloud-controller-manager
   - kind: Secret
@@ -591,6 +593,27 @@ data:
 kind: ConfigMap
 metadata:
   name: vsphere-csi-controller
+  namespace: '${NAMESPACE}'
+---
+apiVersion: v1
+data:
+  data: |
+    apiVersion: storage.k8s.io/v1
+    kind: StorageClass
+    metadata:
+      name: nvme-fs
+      annotations:
+        storageclass.kubernetes.io/is-default-class: "true"
+    provisioner: csi.vsphere.vmware.com
+    allowVolumeExpansion: true
+    parameters:
+      datastoreurl: ${VSPHERE_CSI_DATASTORE_URL}
+      fstype: ext4
+    reclaimPolicy: Delete
+    volumeBindingMode: WaitForFirstConsumer
+kind: ConfigMap
+metadata:
+  name: vsphere-csi-storageclass
   namespace: '${NAMESPACE}'
 ---
 apiVersion: v1
