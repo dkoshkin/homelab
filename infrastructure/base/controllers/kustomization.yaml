@@ -4,7 +4,5 @@ resources:
   - kube-vip-cloud-controller.yaml
   - ingress-nginx.yaml
   - metrics-server.yaml
-  - secret-weave-gitops-cluster-user-auth.yaml
   - weave-gitops-dashboard.yaml
-  - secret-prometheus-stack-grafana.yaml
   - prometheus-stack.yaml

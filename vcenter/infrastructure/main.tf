@@ -108,14 +108,6 @@ resource "null_resource" "kubernetes-bootstrapper" {
     source      = "${local.direcotires.kubernetes-bootstrapper.source}/cluster-template.yaml"
     destination = "${local.direcotires.kubernetes-bootstrapper.destination}/cluster-template.yaml"
   }
-  provisioner "file" {
-    source      = "${local.direcotires.kubernetes-bootstrapper.source}/slack-url-secret.yaml"
-    destination = "${local.direcotires.kubernetes-bootstrapper.destination}/slack-url-secret.yaml"
-  }
-  provisioner "file" {
-    source      = "${local.direcotires.kubernetes-bootstrapper.source}/sealed-secret.yaml"
-    destination = "${local.direcotires.kubernetes-bootstrapper.destination}/sealed-secret.yaml"
-  }
   provisioner "remote-exec" {
     inline = [
       "chmod +x ${local.direcotires.kubernetes-bootstrapper.destination}/setup.sh",

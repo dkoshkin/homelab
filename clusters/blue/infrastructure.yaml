@@ -59,3 +59,24 @@ spec:
   postBuild:
     substitute:
       CLUSTER_NAME: "blue"
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: infra-secrets
+  namespace: flux-system
+spec:
+  dependsOn:
+  - name: infra-prereqs
+  interval: 1h
+  retryInterval: 1m
+  timeout: 5m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./infrastructure/blue/secrets
+  prune: true
+  wait: true
+  postBuild:
+    substitute:
+      CLUSTER_NAME: "blue"

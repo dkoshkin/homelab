@@ -100,36 +100,6 @@
     kubectl --kubeconfig=$(pwd)/kubernetes-bootstrapper/$CLUSTER_NAME.conf apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.24.1/manifests/calico.yaml
     ```
 
-## Create a Required Secrets
-
-1.  Create the `flux-system` namespace:
-
-    ```
-    kubectl create \
-    --kubeconfig=$(pwd)/kubernetes-bootstrapper/$CLUSTER_NAME.conf \
-    namespace flux-system
-    ```
-
-https://github.com/bitnami-labs/sealed-secrets
-
-Reuse the same certificate key pair to share Secrets across multiple clusters.
-
-1.  Create the Sealed Secrets Secret:
-
-    ```
-    kubectl create \
-    --kubeconfig=$(pwd)/kubernetes-bootstrapper/$CLUSTER_NAME.conf \
-    -f $(pwd)/kubernetes-bootstrapper/sealed-secret.yaml
-    ```
-
-1.  Create a Slack Notifier Secret:
-
-    ```
-    kubectl create \
-    --kubeconfig=$(pwd)/kubernetes-bootstrapper/$CLUSTER_NAME.conf \
-    -f $(pwd)/kubernetes-bootstrapper/slack-url-secret.yaml
-    ```
-
 ## Bootstrap Flux
 
 https://github.com/fluxcd/flux2
@@ -150,4 +120,72 @@ https://github.com/fluxcd/flux2
     --repository=homelab \
     --path=clusters/$CLUSTER_NAME \
     --personal
+    ```
+
+##  Cluster Sealed Secrets
+
+Create [Sealed Secrets](https://github.com/bitnami-labs/sealed-secrets) for shared infrastrucutere.
+
+```bash
+export CLUSTER_SEALED_SECRETS_DIR=infrastructure/$CLUSTER_NAME/secrets
+export SEALED_SECRET_CERT=$CLUSTER_SEALED_SECRETS_DIR/sealed-secret-cert.pem
+```
+
+1.  Setup Weave Gitops
+
+    ```bash
+    kubectl create secret generic cluster-user-auth \
+    --namespace flux-system \
+    --from-literal username=$WEAVE_GITOPS_USERNAME \
+    --from-literal password=$(echo -n $WEAVE_GITOPS_PASSWORD | gitops get bcrypt-hash) \
+    --dry-run=client \
+    -o yaml | \
+    kubeseal \
+        --format=yaml \
+        --cert=$SEALED_SECRET_CERT \
+        > $CLUSTER_SEALED_SECRETS_DIR/weave-gitops-cluster-user-auth.yaml
+    ```
+
+1.  Setup Prometheus Grafana
+
+    ```bash
+    kubectl create secret generic prometheus-stack-grafana \
+    --namespace prometheus \
+    --from-literal admin-user=$PROMETHEUS_GRAFANA_USERNAME \
+    --from-literal admin-password=$PROMETHEUS_GRAFANA_PASSWORD \
+    --from-literal ldap-toml="" \
+    --dry-run=client \
+    -o yaml | \
+    kubeseal \
+        --format=yaml \
+        --cert=$SEALED_SECRET_CERT \
+        > $CLUSTER_SEALED_SECRETS_DIR/prometheus-stack-grafana.yaml
+    ```
+
+1.  Setup Cert Manager
+
+    ```bash
+    kubectl create secret generic cloudflare-api-token \
+    --namespace cert-manager \
+    --from-literal api-token=$CLOUDFLARE_API_TOKEN \
+    --dry-run=client \
+    -o yaml | \
+    kubeseal \
+        --format=yaml \
+        --cert=$SEALED_SECRET_CERT \
+        > $CLUSTER_SEALED_SECRETS_DIR/cloudflare-api-token.yaml
+    ```
+
+1.  Setup Slack Notifier
+
+    ```bash
+    kubectl create secret generic slack-url \
+    --namespace flux-system \
+    --from-literal address=$CLOUDFLARE_API_TOKEN \
+    --dry-run=client \
+    -o yaml | \
+    kubeseal \
+        --format=yaml \
+        --cert=$SEALED_SECRET_CERT \
+        > $CLUSTER_SEALED_SECRETS_DIR/slack-url.yaml
     ```
