@@ -181,7 +181,7 @@ export SEALED_SECRET_CERT=$CLUSTER_SEALED_SECRETS_DIR/sealed-secret-cert.pem
     ```bash
     kubectl create secret generic slack-url \
     --namespace flux-system \
-    --from-literal address=$CLOUDFLARE_API_TOKEN \
+    --from-literal address=$SLACK_URL \
     --dry-run=client \
     -o yaml | \
     kubeseal \
