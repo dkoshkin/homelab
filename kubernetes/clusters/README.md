@@ -177,6 +177,14 @@ export SEALED_SECRET_CERT=$CLUSTER_SEALED_SECRETS_DIR/sealed-secret-cert.pem
 1.  Setup Prometheus Grafana
 
     ```bash
+    cat <<EOF >$CLUSTER_SEALED_SECRETS_DIR/prometheus-stack-grafana.yaml
+    ---
+    apiVersion: v1
+    kind: Namespace
+    metadata:
+      name: prometheus
+    ---
+    EOF
     kubectl create secret generic prometheus-stack-grafana \
     --namespace prometheus \
     --from-literal admin-user=$PROMETHEUS_GRAFANA_USERNAME \
@@ -193,6 +201,14 @@ export SEALED_SECRET_CERT=$CLUSTER_SEALED_SECRETS_DIR/sealed-secret-cert.pem
 1.  Setup Cert Manager
 
     ```bash
+    cat <<EOF >$CLUSTER_SEALED_SECRETS_DIR/cloudflare-api-token.yaml
+    ---
+    apiVersion: v1
+    kind: Namespace
+    metadata:
+      name: cert-manager
+    ---
+    EOF
     kubectl create secret generic cloudflare-api-token \
     --namespace cert-manager \
     --from-literal api-token=$CLOUDFLARE_API_TOKEN \
