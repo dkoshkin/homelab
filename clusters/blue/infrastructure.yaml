@@ -2,25 +2,6 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
 metadata:
-  name: infra-flux-alert-provider
-  namespace: flux-system
-spec:
-  interval: 1h
-  retryInterval: 1m
-  timeout: 5m
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-  path: ./infrastructure/base/flux-alert-provider
-  prune: true
-  wait: true
-  postBuild:
-    substitute:
-      CLUSTER_NAME: "blue"
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
-kind: Kustomization
-metadata:
   name: infra-sealed-secrets-controller
   namespace: flux-system
 spec:
@@ -40,7 +21,7 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
 metadata:
-  name: infra-cloud-controller
+  name: infra-cert-issuers
   namespace: flux-system
 spec:
   interval: 1h
@@ -49,13 +30,12 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./infrastructure/base/cloud-controller
+  path: ./infrastructure/base/cert-issuers
   prune: true
   wait: true
   postBuild:
     substitute:
       CLUSTER_NAME: "blue"
-      KUBE_VIP_IP_RANGE: "192.168.69.201-192.168.69.209"
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
@@ -65,6 +45,7 @@ metadata:
 spec:
   dependsOn:
   - name: infra-cloud-controller
+  - name: infra-cert-issuers
   interval: 1h
   retryInterval: 1m
   timeout: 5m
@@ -86,7 +67,6 @@ metadata:
 spec:
   dependsOn:
   - name: infra-sealed-secrets-controller
-  - name: infra-cloud-controller
   - name: infra-ingress-controller
   interval: 1h
   retryInterval: 1m
@@ -105,22 +85,22 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
 metadata:
-  name: infra-configs
+  name: infra-cloud-controller
   namespace: flux-system
 spec:
-  dependsOn:
-  - name: infra-controllers
   interval: 1h
   retryInterval: 1m
   timeout: 5m
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./infrastructure/base/configs
+  path: ./infrastructure/blue/cloud-controller
   prune: true
+  wait: true
   postBuild:
     substitute:
       CLUSTER_NAME: "blue"
+      KUBE_VIP_IP_RANGE: "192.168.69.201-192.168.69.209"
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
@@ -128,6 +108,8 @@ metadata:
   name: infra-secrets
   namespace: flux-system
 spec:
+  dependsOn:
+  - name: infra-sealed-secrets-controller
   interval: 1h
   retryInterval: 1m
   timeout: 5m

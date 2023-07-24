@@ -122,6 +122,34 @@ https://github.com/fluxcd/flux2
     --personal
     ```
 
+3.  Create Slack notifier Secret
+
+    ```bash
+    kubectl create secret generic slack-url \
+    --kubeconfig=$(pwd)/kubernetes-bootstrapper/$CLUSTER_NAME.conf \
+    --namespace flux-system \
+    --from-literal address=$SLACK_URL
+    ```
+
+4.  Create the Slack notifier Provider
+
+    ```bash
+    kubectl create \
+    --kubeconfig=$(pwd)/kubernetes-bootstrapper/$CLUSTER_NAME.conf \
+    -f - <<EOF
+    apiVersion: notification.toolkit.fluxcd.io/v1beta2
+    kind: Provider
+    metadata:
+      name: slack
+      namespace: flux-system
+    spec:
+      type: slack
+      channel: general
+      secretRef:
+        name: slack-url
+    EOF
+    ```
+
 ##  Cluster Sealed Secrets
 
 Create [Sealed Secrets](https://github.com/bitnami-labs/sealed-secrets) for shared infrastrucutere.
@@ -176,16 +204,3 @@ export SEALED_SECRET_CERT=$CLUSTER_SEALED_SECRETS_DIR/sealed-secret-cert.pem
         > $CLUSTER_SEALED_SECRETS_DIR/cloudflare-api-token.yaml
     ```
 
-1.  Setup Slack Notifier
-
-    ```bash
-    kubectl create secret generic slack-url \
-    --namespace flux-system \
-    --from-literal address=$SLACK_URL \
-    --dry-run=client \
-    -o yaml | \
-    kubeseal \
-        --format=yaml \
-        --cert=$SEALED_SECRET_CERT \
-        > $CLUSTER_SEALED_SECRETS_DIR/slack-url.yaml
-    ```
