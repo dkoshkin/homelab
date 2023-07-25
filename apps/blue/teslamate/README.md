@@ -164,7 +164,22 @@ flux suspend -n teslamate helmrelease --all
 kubectl scale deploy -n teslamate teslamate --replicas=0
 ```
 
-3. Run the a `Pod` to restore from an AWS S3 backup
+3. Grant user SUPERUSER privileges: 
+
+    a. Fetch the password from `postgres-password`:
+    ```bash
+    kubectl get secret -n postgresql cluster-postgresql
+    ```
+
+    b. Grant the privileges
+    ```bash
+    kubectl exec -it -n postgresql cluster-postgresql-0 -- psql -U postgres -d teslamate
+    grant all privileges on database teslamate to dkoshkin;
+    ALTER USER dkoshkin WITH SUPERUSER;
+    exit
+    ```
+
+4. Run the a `Pod` to restore from an AWS S3 backup
 
 ```bash
 cat <<EOF | kubectl apply -f -
@@ -187,13 +202,13 @@ spec:
 EOF
 ``` 
 
-4. Scale the teslamate `Deployment` back to 1
+5. Scale the teslamate `Deployment` back to 1
 
 ```bash
 kubectl scale deploy -n teslamate teslamate --replicas=1
 ```
 
-5. Resume Flux reconcilation
+6. Resume Flux reconcilation
 
 ```bash
 flux resume -n teslamate helmrelease --all
