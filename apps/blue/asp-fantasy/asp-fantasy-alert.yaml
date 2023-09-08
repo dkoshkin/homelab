@@ -1,0 +1,15 @@
+---
+apiVersion: notification.toolkit.fluxcd.io/v1beta2
+kind: Alert
+metadata:
+  name: asp-fantasy
+  namespace: flux-system
+spec:
+  summary: "Cluster: ${CLUSTER_NAME}, App: asp-fantasy"
+  providerRef:
+    name: slack
+  eventSeverity: info
+  eventSources:
+    - kind: Kustomization
+      name: asp-fantasy
+      namespace: asp-fantasy
