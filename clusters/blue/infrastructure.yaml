@@ -138,3 +138,6 @@ spec:
   path: ./infrastructure/blue/kubernetes-upgrader
   prune: true
   wait: true
+  postBuild:
+    substitute:
+      CLUSTER_NAME: "blue"
