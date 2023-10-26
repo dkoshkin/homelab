@@ -1,8 +1,0 @@
-apiVersion: image.toolkit.fluxcd.io/v1beta2
-kind: ImageRepository
-metadata:
-  name: asp-fantasy
-  namespace: flux-system
-spec:
-  image: ghcr.io/koshkin-bros/asp-fantasy
-  interval: 1m
