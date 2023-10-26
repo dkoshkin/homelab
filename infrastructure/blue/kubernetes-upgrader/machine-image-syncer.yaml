@@ -62,7 +62,7 @@ spec:
                   mountPath: /tmp/kubernetes-vars/
           containers:
             - name: runner
-              image: registry.k8s.io/scl-image-builder/cluster-node-image-builder-amd64:v0.1.19
+              image: registry.k8s.io/scl-image-builder/cluster-node-image-builder-amd64:v0.1.20
               imagePullPolicy: IfNotPresent
               command:
                 - "/bin/bash"
