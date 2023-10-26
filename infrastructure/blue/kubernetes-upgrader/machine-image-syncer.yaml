@@ -27,6 +27,8 @@ kind: MachineImageTemplate
 metadata:
   name: ubuntu-2004
   namespace: default
+  annotations:
+    kustomize.toolkit.fluxcd.io/substitute: disabled
 spec:
   template:
     metadata:
