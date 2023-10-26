@@ -115,10 +115,12 @@ https://github.com/fluxcd/flux2
 
     ```
     flux bootstrap github \
+    --components-extra=image-reflector-controller,image-automation-controller \
     --kubeconfig=$(pwd)/kubernetes-bootstrapper/$CLUSTER_NAME.conf \
     --owner=dkoshkin \
     --repository=homelab \
     --path=clusters/$CLUSTER_NAME \
+    --read-write-key \
     --personal
     ```
 
