@@ -4,3 +4,6 @@ resources:
   - namespace.yaml
   - asp-fantasy.yaml
   - asp-fantasy-alert.yaml
+  - image-policy.yaml
+  - image-repository.yaml
+  - image-update-automation.yaml
