@@ -40,3 +40,29 @@ spec:
       envFromSecrets:
       - name: postgresql-db-auth
       - name: s3-credentials
+    grafana:
+      admin:
+        existingSecret: grafana-admin-auth
+      env:
+        # serve Grafana from path /grafana
+        GF_SERVER_ROOT_URL: "%(protocol)s://%(domain)s/grafana"
+        GF_SERVER_SERVE_FROM_SUB_PATH: "true"
+        # these values are already set in the default template
+        # override with the values that the Teslamate Grafana image expects
+        GF_PATHS_CONFIG: "/etc/grafana/grafana.ini"
+        GF_PATHS_DATA: "/var/lib/grafana"
+        GF_PATHS_LOGS: "/var/log/grafana"
+        GF_PATHS_PROVISIONING: "/etc/grafana/provisioning"
+      envFromSecret: postgresql-db-auth
+      ingress:
+        enabled: true
+        ingressClassName: public
+        annotations:
+          cert-manager.io/cluster-issuer: letsencrypt-cloudflare
+        path: /grafana
+        hosts:
+        - teslamate.dimitrikoshkin.com
+        tls:
+        - secretName: teslamate.dimitrikoshkin.com-tls
+          hosts:
+            - teslamate.dimitrikoshkin.com
