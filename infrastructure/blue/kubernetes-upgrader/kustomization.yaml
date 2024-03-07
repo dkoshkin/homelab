@@ -2,5 +2,6 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - kubernetes-upgrader.yaml
-  - machine-image-syncer.yaml
+  - machine-image-syncer-1.28.yaml
+  - machine-image-syncer-1.27.yaml
   - cluster-upgrader.yaml
