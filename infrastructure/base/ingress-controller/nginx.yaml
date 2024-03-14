@@ -34,7 +34,7 @@ spec:
       updateStrategy:
         type: Recreate
       hostPort:
-        enabled: true
+        enabled: false
       service:
         type: "${ingress_service_type:=LoadBalancer}"
       ingressClass: public
