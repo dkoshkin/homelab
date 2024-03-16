@@ -1,14 +1,7 @@
 .env
+.envs
 # Teslamate auth file
 teslamate-auth
-
-# Used by Kubernetes Bootstrapper to create a Kubernetes cluster
-# Contains the vCenter credentials
-vcenter/infrastructure/vms/kubernetes-bootstrapper/.envs
-
-# Used by Kubernetes Image Builder to build the Kubernetes templates
-# Contains the vCenter credentials
-vcenter/infrastructure/vms/kubernetes-image-builder/vsphere.json
 
 # Local .terraform directories
 **/.terraform/*
