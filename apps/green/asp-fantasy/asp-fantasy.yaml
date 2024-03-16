@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: asp-fantasy
+  namespace: asp-fantasy
+  labels:
+    app.kubernetes.io/name: asp-fantasy
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: asp-fantasy
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: asp-fantasy
+    spec:
+      containers:
+        - name: asp-fantasy
+          image: ghcr.io/koshkin-bros/asp-fantasy:v0.1.7 # {"$imagepolicy": "flux-system:asp-fantasy"}
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: asp-fantasy
+  namespace: asp-fantasy
+  labels:
+    app.kubernetes.io/name: asp-fantasy
+spec:
+  selector:
+    app.kubernetes.io/name: asp-fantasy
+  ports:
+  - name: http
+    port: 8080
+    protocol: TCP
+    targetPort: http
+  type: ClusterIP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-cloudflare
+  labels:
+    app.kubernetes.io/name: asp-fantasy
+  name: asp-fantasy
+  namespace: asp-fantasy
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: asp-fantasy.dimitrikoshkin.com
+    http:
+      paths:
+      - backend:
+          service:
+            name: asp-fantasy
+            port:
+              name: http
+        path: /
+        pathType: ImplementationSpecific
+  tls:
+  - hosts:
+    - asp-fantasy.dimitrikoshkin.com
+    secretName: asp-fantasy.dimitrikoshkin.com-tls

@@ -1,0 +1,10 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - namespace.yaml
+  - asp-fantasy.yaml
+  - asp-fantasy-alert.yaml
+  - asp-fantasy-user.yaml
+  - image-policy.yaml
+  - image-repository.yaml
+  - image-update-automation.yaml

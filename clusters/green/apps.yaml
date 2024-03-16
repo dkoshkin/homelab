@@ -1,0 +1,20 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: apps
+  namespace: flux-system
+spec:
+  interval: 10m0s
+  dependsOn:
+    - name: infra-ingress
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./apps/green
+  prune: true
+  wait: true
+  timeout: 5m0s
+  postBuild:
+    substitute:
+      CLUSTER_NAME: "green"
