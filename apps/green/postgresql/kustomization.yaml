@@ -1,0 +1,8 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - namespace.yaml
+  - secret-db-auth-for-teslamate-values.yaml
+  - postgresql-repository.yaml
+  - postgresql-release.yaml
+  - postgresql-flux-alert.yaml
