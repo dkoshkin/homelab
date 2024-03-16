@@ -1,0 +1,18 @@
+---
+apiVersion: notification.toolkit.fluxcd.io/v1beta2
+kind: Alert
+metadata:
+  name: teslamate
+  namespace: flux-system
+spec:
+  summary: "Cluster: ${CLUSTER_NAME}, App: teslamate"
+  providerRef:
+    name: slack
+  eventSeverity: info
+  eventSources:
+    - kind: Kustomization
+      name: teslamate
+      namespace: teslamate
+    - kind: HelmRelease
+      name: teslamate
+      namespace: teslamate

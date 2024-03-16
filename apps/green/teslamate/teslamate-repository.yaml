@@ -1,0 +1,8 @@
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: teslamate
+  namespace: teslamate
+spec:
+  interval: 1m
+  url: https://dkoshkin.github.io/teslamate-helm-chart
