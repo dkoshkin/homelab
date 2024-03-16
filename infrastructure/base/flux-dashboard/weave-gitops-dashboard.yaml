@@ -42,7 +42,7 @@ spec:
       createSecret: false
     ingress:
       enabled: true
-      className: nginx
+      className: public
       annotations:
         cert-manager.io/cluster-issuer: letsencrypt-cloudflare
       hosts:

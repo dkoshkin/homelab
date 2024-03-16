@@ -21,7 +21,7 @@ spec:
     - name: teslamate-ecryption-key
     ingress:
       enabled: true
-      ingressClassName: nginx
+      ingressClassName: public
       annotations:
         cert-manager.io/cluster-issuer: letsencrypt-cloudflare
         nginx.ingress.kubernetes.io/auth-type: basic
@@ -56,7 +56,7 @@ spec:
       envFromSecret: postgresql-db-auth
       ingress:
         enabled: true
-        ingressClassName: nginx
+        ingressClassName: public
         annotations:
           cert-manager.io/cluster-issuer: letsencrypt-cloudflare
         path: /grafana

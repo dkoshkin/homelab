@@ -50,7 +50,7 @@ metadata:
   name: asp-fantasy
   namespace: asp-fantasy
 spec:
-  ingressClassName: nginx
+  ingressClassName: public
   rules:
   - host: asp-fantasy.dimitrikoshkin.com
     http:
