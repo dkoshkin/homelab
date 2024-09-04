@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: asp-fantasy
-          image: ghcr.io/koshkin-bros/asp-fantasy:v0.1.7 # {"$imagepolicy": "flux-system:asp-fantasy"}
+          image: ghcr.io/koshkin-bros/asp-fantasy:v0.1.8 # {"$imagepolicy": "flux-system:asp-fantasy"}
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
