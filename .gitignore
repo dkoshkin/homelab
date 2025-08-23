@@ -1,3 +1,5 @@
+.idea/
+
 .env
 .envs
 # Teslamate auth file
