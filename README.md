@@ -1,5 +1,7 @@
 # Dimitri's Homelab
 
+Application Statuses https://monitor-green-apps.dimitrikoshkin.com/status/homelab
+
 This repo contains Kubernetes specs used by [Flux](https://fluxcd.io/flux/installation/).
 
 Its managing the following clutsters and applications:
