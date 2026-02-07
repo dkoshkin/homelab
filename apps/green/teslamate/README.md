@@ -39,7 +39,7 @@ kubeseal \
 htpasswd -Bbn $TESLAMATE_USERNAME $TESLAMATE_PASSWORD > $DIR/teslamate-auth
 kubectl create secret generic teslamate-admin-auth \
   --namespace teslamate \
-  --from-file=auth=$DIR/teslamate-auth \
+  --from-file=users=$DIR/teslamate-auth \
   --dry-run=client \
   -o yaml | \
 kubeseal \

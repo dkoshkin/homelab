@@ -8,5 +8,6 @@ resources:
   - secret-postgresql-db-auth.yaml
   - secret-s3-credentials.yaml
   - teslamate-repository.yaml
+  - teslamate-basic-auth-middleware.yaml
   - teslamate-release.yaml
   - teslamate-flux-alert.yaml

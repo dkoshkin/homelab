@@ -1,0 +1,9 @@
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: teslamate-basic-auth
+  namespace: teslamate
+spec:
+  basicAuth:
+    secret: teslamate-admin-auth

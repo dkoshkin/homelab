@@ -8,7 +8,7 @@ Its managing the following clutsters and applications:
 
 * green
   * [cert-manager](https://cert-manager.io/)
-  * [NGINX Ingress](https://github.com/kubernetes/ingress-nginx)
+  * [Traefik](https://github.com/traefik/traefik)
   * [Sealed Secrets](https://github.com/bitnami-labs/sealed-secrets)
   * [Uptime Kuma](https://uptime.kuma.pet/) - Application monitoring and status pages
   * [CloutNativePG](https://cloudnative-pg.io/)

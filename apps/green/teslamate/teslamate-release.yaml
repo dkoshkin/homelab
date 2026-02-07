@@ -24,9 +24,7 @@ spec:
       ingressClassName: public
       annotations:
         cert-manager.io/cluster-issuer: letsencrypt-cloudflare
-        nginx.ingress.kubernetes.io/auth-type: basic
-        nginx.ingress.kubernetes.io/auth-secret: teslamate-admin-auth
-        nginx.ingress.kubernetes.io/auth-realm: 'Login to Teslamate'
+        traefik.ingress.kubernetes.io/router.middlewares: teslamate-teslamate-basic-auth@kubernetescrd
       hosts:
       - teslamate.dimitrikoshkin.com
       tls:
