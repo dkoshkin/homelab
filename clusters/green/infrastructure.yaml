@@ -40,9 +40,51 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
 metadata:
+  name: infra-metallb
+  namespace: flux-system
+spec:
+  interval: 1h
+  retryInterval: 1m
+  timeout: 5m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./infrastructure/base/metallb
+  prune: true
+  wait: true
+  postBuild:
+    substitute:
+      CLUSTER_NAME: "green"
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: infra-metallb-config
+  namespace: flux-system
+spec:
+  dependsOn:
+  - name: infra-metallb
+  interval: 1h
+  retryInterval: 1m
+  timeout: 5m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./infrastructure/base/metallb-config
+  prune: true
+  wait: true
+  postBuild:
+    substitute:
+      CLUSTER_NAME: "green"
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
   name: infra-ingress-controller
   namespace: flux-system
 spec:
+  dependsOn:
+  - name: infra-metallb-config
   interval: 1h
   retryInterval: 1m
   timeout: 5m
