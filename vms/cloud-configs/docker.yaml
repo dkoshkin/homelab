@@ -1,7 +1,10 @@
 #cloud-config
 package_update: true
+package_upgrade: true
 packages:
   - qemu-guest-agent
+  - unattended-upgrades
+  - update-notifier-common
 write_files:
   - path: /run/scripts/setup.sh
     content: |
@@ -12,23 +15,27 @@ write_files:
       # Disable password prompt for sudo for this user
       echo "$USER ALL=(ALL) NOPASSWD: ALL" | tee /etc/sudoers.d/$USER > /dev/null
 
-      # Update all packages and cache
-      apt -y update && apt -y upgrade
+      # Disable SSH password authentication
+      sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
+      # Enable key-based authentication
+      sed -i 's/#PubkeyAuthentication yes/PubkeyAuthentication yes/' /etc/ssh/sshd_config`
 
       # Install Docker
-      apt-get -y install ca-certificates curl gnupg
-      # Add Docker's GPG key
-      install -m 0755 -d /etc/apt/keyring
-      rm -rf /etc/apt/keyrings/docker.gpg
-      curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-      chmod a+r /etc/apt/keyrings/docker.gpg
+      apt-get -y install ca-certificates curl
+      # Add Docker's official GPG key
+      install -m 0755 -d /etc/apt/keyrings
+      curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+      chmod a+r /etc/apt/keyrings/docker.asc
       # Add Docker repository
-      echo \
-        "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-        "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
-        tee /etc/apt/sources.list.d/docker.list > /dev/null
+      tee /etc/apt/sources.list.d/docker.sources <<EOF
+      Types: deb
+      URIs: https://download.docker.com/linux/ubuntu
+      Suites: $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}")
+      Components: stable
+      Signed-By: /etc/apt/keyrings/docker.asc
+      EOF
       apt-get -y update
-      # Install the Docker package
+      # Install the Docker packages
       apt-get -y install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
       # Add this user to the docker group
       usermod -aG docker $USER
@@ -36,18 +43,29 @@ write_files:
       systemctl enable docker.service
       systemctl enable containerd.service
 
-      # Disable SSH password authentication
-      sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
-      # Enable key-based authentication
-      sed -i 's/#PubkeyAuthentication yes/PubkeyAuthentication yes/' /etc/ssh/sshd_config
-
-      # Remove packages that failed to isntall
-      apt-get -y autoclean
       # Remove APT cache
       apt-get -y clean
       # Remove dependencies that are no longer needed
       apt-get -y autoremove
     permissions: '0755'
+  - path: /etc/apt/apt.conf.d/20auto-upgrades
+    content: |
+      APT::Periodic::Update-Package-Lists "1";
+      APT::Periodic::Unattended-Upgrade "1";
+      APT::Periodic::Download-Upgradeable-Packages "1";
+      APT::Periodic::AutocleanInterval "7";
+  - path: /etc/apt/apt.conf.d/50unattended-upgrades
+    content: |
+      Unattended-Upgrade::Allowed-Origins {
+        "${distro_id}:${distro_codename}";
+        "${distro_id}:${distro_codename}-security";
+        "${distro_id}:${distro_codename}-updates";
+      };
+      Unattended-Upgrade::Automatic-Reboot "true";
+      Unattended-Upgrade::Automatic-Reboot-WithUsers "true";
+      Unattended-Upgrade::Automatic-Reboot-Time "10:00";
+      Unattended-Upgrade::Remove-Unused-Dependencies "true";
+      Unattended-Upgrade::Remove-New-Unused-Dependencies "true";
 runcmd:
   - - systemctl
     - enable
