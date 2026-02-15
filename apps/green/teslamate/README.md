@@ -164,17 +164,11 @@ flux suspend -n teslamate helmrelease --all
 kubectl scale deploy -n teslamate teslamate --replicas=0
 ```
 
-3. Grant user SUPERUSER privileges: 
+3. Grant user SUPERUSER privileges:
 
-    a. Fetch the password from `postgres-password`:
     ```bash
-    kubectl get secret -n postgresql cluster-postgresql -o yaml
-    ```
+    kubectl exec -it -n postgresql cnpg-cluster-postgresql-1 -- psql -U postgres -d teslamate
 
-    b. Grant the privileges
-    ```bash
-    kubectl exec -it -n postgresql cluster-postgresql-0 -- psql -U postgres -d teslamate
-    
     grant all privileges on database teslamate to dkoshkin;
     ALTER USER dkoshkin WITH SUPERUSER;
     exit
@@ -192,7 +186,7 @@ metadata:
 spec:
   containers:
   - name: s3-restore
-    image: eeshugerman/postgres-backup-s3:15
+    image: ghcr.io/solectrus/postgres-s3-backup:18
     command: ['sh', 'restore.sh']
     envFrom:
     - secretRef:
