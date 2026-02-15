@@ -69,6 +69,8 @@ export CLUSTER_SEALED_SECRETS_DIR=infrastructure/$CLUSTER_NAME/secrets
 export SEALED_SECRET_CERT=$CLUSTER_SEALED_SECRETS_DIR/sealed-secret-cert.pem
 
 mkdir -p $CLUSTER_SEALED_SECRETS_DIR
+
+kubeseal --fetch-cert --controller-namespace flux-system --controller-name sealed-secrets-controller > $SEALED_SECRET_CERT
 ```
 
 1.  Setup Weave Gitops
