@@ -184,6 +184,28 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
 metadata:
+  name: infra-cloudflared
+  namespace: flux-system
+spec:
+  dependsOn:
+  - name: infra-secrets
+  - name: infra-metallb-config
+  interval: 1h
+  retryInterval: 1m
+  timeout: 5m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./infrastructure/base/cloudflared
+  prune: true
+  wait: true
+  postBuild:
+    substitute:
+      CLUSTER_NAME: "green"
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
   name: infra-uptime-kuma
   namespace: flux-system
 spec:

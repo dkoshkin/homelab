@@ -111,3 +111,17 @@ kubeseal --fetch-cert --controller-namespace flux-system --controller-name seale
         > $CLUSTER_SEALED_SECRETS_DIR/cloudflare-api-token.yaml
     ```
 
+1.  Setup Cloudflared Tunnel
+
+    ```bash
+    kubectl create secret generic cloudflared-tunnel-token \
+    --namespace cloudflared \
+    --from-literal token=$CLOUDFLARED_TUNNEL_TOKEN \
+    --dry-run=client \
+    -o yaml | \
+    kubeseal \
+        --format=yaml \
+        --cert=$SEALED_SECRET_CERT \
+        > $CLUSTER_SEALED_SECRETS_DIR/cloudflared-tunnel-token.yaml
+    ```
+
