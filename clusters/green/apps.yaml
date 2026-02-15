@@ -2,7 +2,66 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
 metadata:
-  name: apps
+  name: apps-postgresql
+  namespace: flux-system
+spec:
+  interval: 10m0s
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./apps/green/postgresql
+  prune: true
+  wait: true
+  timeout: 5m0s
+  postBuild:
+    substitute:
+      CLUSTER_NAME: "green"
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: apps-postgresql-cluster
+  namespace: flux-system
+spec:
+  interval: 10m0s
+  dependsOn:
+    - name: apps-postgresql
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./apps/green/postgresql-cluster
+  prune: true
+  wait: true
+  timeout: 5m0s
+  postBuild:
+    substitute:
+      CLUSTER_NAME: "green"
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: apps-teslamate
+  namespace: flux-system
+spec:
+  interval: 10m0s
+  dependsOn:
+    - name: infra-ingress-controller
+    - name: apps-postgresql-cluster
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./apps/green/teslamate
+  prune: true
+  wait: true
+  timeout: 5m0s
+  postBuild:
+    substitute:
+      CLUSTER_NAME: "green"
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: apps-asp-fantasy
   namespace: flux-system
 spec:
   interval: 10m0s
@@ -11,7 +70,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./apps/green
+  path: ./apps/green/asp-fantasy
   prune: true
   wait: true
   timeout: 5m0s
