@@ -1,5 +1,7 @@
 # Clusters
 
+This cluster is created using [Talos](https://www.talos.dev/).
+
 ## Set environment variables
 
 ```

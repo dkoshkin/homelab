@@ -21,3 +21,4 @@ crash.log
 
 # Exclude Kubernetes admin configuration files
 kubernetes/clusters/*.conf
+kubernetes/clusters/talos/
