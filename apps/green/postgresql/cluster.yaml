@@ -24,7 +24,6 @@ spec:
   
   storage:
     size: 50Gi
-    storageClass: "harvester"
   
   # Configure superuser credentials using existing secret
   superuserSecret:
