@@ -12,6 +12,7 @@ This repo contains configuration and instructions on how to run [Teslamate](http
 * An [AWS](https://aws.amazon.com/) account to store PostgreSQL backups - see `s3-policy.json` for a minimum S3 policy (replace `<bucket-name`> placeholers)
 * Open port `80` - for [Let's Encrypt](https://letsencrypt.org/)
 * Open port `443` - for Teslamate and Grafana dashboards
+* CloudNativePG cluster bootstrapped with the `teslamate` database and owner — see [PostgreSQL README](../postgresql/README.md)
 
 ## Setup Teslamate
 
@@ -70,7 +71,22 @@ kubeseal \
     > $DIR/secret-postgresql-db-auth.yaml
 ```
 
-4. Create a `Secret` with AWS S3 credentials
+4. Create a `Secret` to bootstrap the database
+
+```bash
+kubectl create secret generic cnpg-user-teslamate \
+  --namespace postgresql \
+  --from-literal username=$POSTGRES_USERNAME \
+  --from-literal password=$POSTGRES_PASSWORD \
+  --dry-run=client \
+  -o yaml | \
+kubeseal \
+    --format=yaml \
+    --cert=$SEALED_SECRET_CERT \
+    > $DIR/secret-cnpg-user-teslamate.yaml
+```
+
+5. Create a `Secret` with AWS S3 credentials
 
 ```bash
 kubectl create secret generic s3-credentials \
@@ -164,17 +180,7 @@ flux suspend -n teslamate helmrelease --all
 kubectl scale deploy -n teslamate teslamate --replicas=0
 ```
 
-3. Grant user SUPERUSER privileges:
-
-    ```bash
-    kubectl exec -it -n postgresql cnpg-cluster-postgresql-1 -- psql -U postgres -d teslamate
-
-    grant all privileges on database teslamate to dkoshkin;
-    ALTER USER dkoshkin WITH SUPERUSER;
-    exit
-    ```
-
-4. Run the a `Pod` to restore from an AWS S3 backup
+3. Run the a `Pod` to restore from an AWS S3 backup
 
 ```bash
 cat <<EOF | kubectl apply -f -
@@ -197,13 +203,13 @@ spec:
 EOF
 ``` 
 
-5. Scale the teslamate `Deployment` back to 1
+4. Scale the teslamate `Deployment` back to 1
 
 ```bash
 kubectl scale deploy -n teslamate teslamate --replicas=1
 ```
 
-6. Resume Flux reconcilation
+5. Resume Flux reconcilation
 
 ```bash
 flux resume -n teslamate helmrelease --all

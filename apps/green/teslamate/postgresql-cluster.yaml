@@ -6,7 +6,16 @@ metadata:
 spec:
   instances: 1
   primaryUpdateStrategy: unsupervised
-  
+
+  bootstrap:
+    initdb:
+      database: teslamate
+      owner: dkoshkin
+      secret:
+        name: cnpg-user-teslamate
+      postInitSQL:
+        - ALTER USER dkoshkin WITH SUPERUSER
+
   postgresql:
     parameters:
       max_connections: "200"

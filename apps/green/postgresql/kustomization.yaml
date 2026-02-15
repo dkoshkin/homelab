@@ -6,3 +6,4 @@ resources:
   - postgresql-repository.yaml
   - postgresql-release.yaml
   - postgresql-flux-alert.yaml
+  - cutover-service.yaml
