@@ -16,7 +16,7 @@ spec:
       author:
         email: fluxcdbot@users.noreply.github.com
         name: fluxcdbot
-      messageTemplate: 'apps: lovenotes {{range .Changed.Objects}}{{println .}}{{end}}'
+      messageTemplate: 'apps: updated lovenotes to {{range .Changed.Objects}}{{.NewImage}}{{end}}'
     push:
       branch: main
   update:

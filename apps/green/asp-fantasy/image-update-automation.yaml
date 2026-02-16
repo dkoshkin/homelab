@@ -16,7 +16,7 @@ spec:
       author:
         email: fluxcdbot@users.noreply.github.com
         name: fluxcdbot
-      messageTemplate: 'apps: asp-fantasy {{range .Changed.Objects}}{{println .}}{{end}}'
+      messageTemplate: 'apps: updated asp-fantasy to {{range .Changed.Objects}}{{.NewImage}}{{end}}'
     push:
       branch: main
   update:
