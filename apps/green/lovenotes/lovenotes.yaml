@@ -1,0 +1,105 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: lovenotes-data
+  namespace: lovenotes
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lovenotes
+  namespace: lovenotes
+  labels:
+    app: lovenotes
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lovenotes
+  template:
+    metadata:
+      labels:
+        app: lovenotes
+    spec:
+      containers:
+      - name: lovenotes
+        image: ghcr.io/dkoshkin/lovenotes:0.3.0 # {"$imagepolicy": "flux-system:lovenotes"}
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 3000
+          name: http
+        env:
+        - name: PORT
+          value: "3000"
+        volumeMounts:
+        - name: data
+          mountPath: /app/data
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "100m"
+          limits:
+            memory: "128Mi"
+            cpu: "200m"
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 3000
+          initialDelaySeconds: 10
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: lovenotes-data
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: lovenotes
+  namespace: lovenotes
+spec:
+  selector:
+    app: lovenotes
+  ports:
+  - port: 80
+    targetPort: 3000
+    name: http
+  type: ClusterIP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: lovenotes
+  namespace: lovenotes
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-cloudflare
+    traefik.ingress.kubernetes.io/router.middlewares: lovenotes-lovenotes-basic-auth@kubernetescrd
+spec:
+  ingressClassName: public
+  tls:
+  - hosts:
+    - lovenotes.dimitrikoshkin.com
+    secretName: lovenotes.dimitrikoshkin.com-tls
+  rules:
+  - host: lovenotes.dimitrikoshkin.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: lovenotes
+            port:
+              number: 80

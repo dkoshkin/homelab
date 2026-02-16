@@ -1,8 +1,8 @@
 apiVersion: image.toolkit.fluxcd.io/v1
 kind: ImageRepository
 metadata:
-  name: asp-fantasy
+  name: lovenotes
   namespace: flux-system
 spec:
-  image: ghcr.io/koshkin-bros/asp-fantasy
+  image: ghcr.io/dkoshkin/lovenotes
   interval: 1m

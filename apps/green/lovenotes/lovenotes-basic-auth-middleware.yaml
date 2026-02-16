@@ -1,0 +1,9 @@
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: lovenotes-basic-auth
+  namespace: lovenotes
+spec:
+  basicAuth:
+    secret: lovenotes-admin-auth

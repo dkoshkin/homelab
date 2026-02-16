@@ -73,23 +73,21 @@ mkdir -p $CLUSTER_SEALED_SECRETS_DIR
 kubeseal --fetch-cert --controller-namespace flux-system --controller-name sealed-secrets-controller > $SEALED_SECRET_CERT
 ```
 
-1.  Setup Weave Gitops
+1.  Setup Cloudflared Tunnel
 
     ```bash
-    kubectl create secret generic cluster-user-auth \
-    --namespace flux-system \
-    --from-literal username=$WEAVE_GITOPS_USERNAME \
-    --from-literal password=$(echo -n $WEAVE_GITOPS_PASSWORD | gitops get bcrypt-hash) \
+    kubectl create secret generic cloudflared-tunnel-token \
+    --namespace cloudflared \
+    --from-literal token=$CLOUDFLARED_TUNNEL_TOKEN \
     --dry-run=client \
     -o yaml | \
     kubeseal \
         --format=yaml \
         --cert=$SEALED_SECRET_CERT \
-        > $CLUSTER_SEALED_SECRETS_DIR/weave-gitops-cluster-user-auth.yaml
+        > $CLUSTER_SEALED_SECRETS_DIR/cloudflared-tunnel-token.yaml
     ```
 
-
-1.  Setup Cert Manager
+1.  Setup cert-manager Cloudflare issuer
 
     ```bash
     cat <<EOF >$CLUSTER_SEALED_SECRETS_DIR/cloudflare-api-token.yaml
@@ -111,17 +109,25 @@ kubeseal --fetch-cert --controller-namespace flux-system --controller-name seale
         > $CLUSTER_SEALED_SECRETS_DIR/cloudflare-api-token.yaml
     ```
 
-1.  Setup Cloudflared Tunnel
+1.  Setup Flux Dashboard
 
     ```bash
-    kubectl create secret generic cloudflared-tunnel-token \
-    --namespace cloudflared \
-    --from-literal token=$CLOUDFLARED_TUNNEL_TOKEN \
+    kubectl create secret generic cluster-user-auth \
+    --namespace flux-system \
+    --from-literal username=$WEAVE_GITOPS_USERNAME \
+    --from-literal password=$(echo -n $WEAVE_GITOPS_PASSWORD | gitops get bcrypt-hash) \
     --dry-run=client \
     -o yaml | \
     kubeseal \
         --format=yaml \
         --cert=$SEALED_SECRET_CERT \
-        > $CLUSTER_SEALED_SECRETS_DIR/cloudflared-tunnel-token.yaml
+        > $CLUSTER_SEALED_SECRETS_DIR/weave-gitops-cluster-user-auth.yaml
     ```
 
+## Apps
+
+Follow instructions in the application READMEs to create ohter Secrets and application specific logic.
+
+* [PostgreSQL](../../apps/green/postgresql/README.md)
+* [Teslamate](../../apps/green/teslamate/README.md)
+* [Lovenotes](../../apps/green/lovenotes/README.md)
