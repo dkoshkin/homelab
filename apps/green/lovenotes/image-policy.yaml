@@ -1,11 +1,11 @@
 apiVersion: image.toolkit.fluxcd.io/v1
 kind: ImagePolicy
 metadata:
-  name: asp-fantasy
+  name: lovenotes
   namespace: flux-system
 spec:
   imageRepositoryRef:
-    name: asp-fantasy
+    name: lovenotes
   policy:
     semver:
       range: '<1.0.0'
