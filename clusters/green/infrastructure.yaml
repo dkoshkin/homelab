@@ -227,9 +227,27 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
 metadata:
+  name: infra-observability-sources
+  namespace: flux-system
+spec:
+  interval: 1h
+  retryInterval: 1m
+  timeout: 5m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./infrastructure/base/observability/sources
+  prune: true
+  wait: true
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
   name: infra-kube-prometheus-stack
   namespace: flux-system
 spec:
+  dependsOn:
+    - name: infra-observability-sources
   interval: 1h
   retryInterval: 1m
   timeout: 5m
@@ -250,6 +268,7 @@ metadata:
   namespace: flux-system
 spec:
   dependsOn:
+  - name: infra-observability-sources
   - name: infra-kube-prometheus-stack
   interval: 1h
   retryInterval: 1m
@@ -271,6 +290,7 @@ metadata:
   namespace: flux-system
 spec:
   dependsOn:
+  - name: infra-observability-sources
   - name: infra-kube-prometheus-stack
   interval: 1h
   retryInterval: 1m
@@ -292,6 +312,7 @@ metadata:
   namespace: flux-system
 spec:
   dependsOn:
+  - name: infra-observability-sources
   - name: infra-kube-prometheus-stack
   - name: infra-loki
   interval: 1h
@@ -314,6 +335,7 @@ metadata:
   namespace: flux-system
 spec:
   dependsOn:
+  - name: infra-observability-sources
   - name: infra-kube-prometheus-stack
   - name: infra-loki
   - name: infra-ingress-controller
