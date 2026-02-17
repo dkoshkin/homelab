@@ -38,6 +38,14 @@ spec:
       kubernetesIngress:
         publishedService:
           enabled: true
+    ports:
+      web:
+        http:
+          redirections:
+            entryPoint:
+              to: websecure
+              scheme: https
+              permanent: true
     service:
       type: "${ingress_service_type:=LoadBalancer}"
 ---

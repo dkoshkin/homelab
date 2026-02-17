@@ -1,0 +1,89 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: grafana
+  namespace: flux-system
+spec:
+  interval: 1h
+  url: https://grafana.github.io/helm-charts
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta2
+kind: HelmRelease
+metadata:
+  name: grafana
+  namespace: flux-system
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: grafana
+      version: "*"
+      sourceRef:
+        kind: HelmRepository
+        name: grafana
+      interval: 1h
+  releaseName: grafana
+  targetNamespace: observability
+  values:
+    # load default dashboards
+    sidecar:
+      dashboards:
+        enabled: true
+        searchNamespace: observability
+    # skip chown which was erroring in a local volume
+    initChownData:
+      enabled: false
+    # Use Grafana's UID/GID
+    securityContext:
+      runAsUser: 472
+      runAsGroup: 472
+      fsGroup: 472
+
+    persistence:
+      enabled: true
+      size: 2Gi
+
+    datasources:
+      datasources.yaml:
+        apiVersion: 1
+        datasources:
+          - name: Prometheus
+            type: prometheus
+            url: http://kube-prometheus-stack-prometheus.observability:9090
+            access: proxy
+            isDefault: true
+          - name: Loki
+            type: loki
+            url: http://loki.observability:3100
+            access: proxy
+
+    ingress:
+      enabled: true
+      ingressClassName: public
+      annotations:
+        cert-manager.io/cluster-issuer: selfsigned-ca
+      hosts:
+        - grafana.homelab.dimitrikoshkin.com
+      tls:
+        - secretName: grafana.homelab.dimitrikoshkin.com-tls
+          hosts:
+            - grafana.homelab.dimitrikoshkin.com
+---
+apiVersion: notification.toolkit.fluxcd.io/v1beta3
+kind: Alert
+metadata:
+  name: grafana
+  namespace: flux-system
+spec:
+  summary: "Cluster: ${CLUSTER_NAME}, App: grafana"
+  providerRef:
+    name: slack
+  eventSeverity: info
+  eventSources:
+    - kind: Kustomization
+      name: infra-grafana
+      namespace: flux-system
+    - kind: HelmRelease
+      name: grafana
+      namespace: flux-system

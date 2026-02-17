@@ -1,0 +1,79 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: grafana
+  namespace: flux-system
+spec:
+  interval: 1h
+  url: https://grafana.github.io/helm-charts
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta2
+kind: HelmRelease
+metadata:
+  name: loki
+  namespace: flux-system
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: loki
+      version: "*"
+      sourceRef:
+        kind: HelmRepository
+        name: grafana
+      interval: 1h
+  releaseName: loki
+  targetNamespace: observability
+  values:
+    deploymentMode: SingleBinary
+    singleBinary:
+      replicas: 1
+      persistence:
+        enabled: true
+        size: 20Gi
+    loki:
+      storage:
+        type: filesystem
+      commonConfig:
+        replication_factor: 1
+      schemaConfig:
+        configs:
+          - from: "2024-01-01"
+            store: tsdb
+            object_store: filesystem
+            schema: v13
+            index:
+              prefix: index_
+              period: 24h
+      auth_enabled: false
+    gateway:
+      enabled: false
+    read:
+      replicas: 0
+    write:
+      replicas: 0
+    backend:
+      replicas: 0
+    chunksCache:
+      enabled: false
+    resultsCache:
+      enabled: false
+---
+apiVersion: notification.toolkit.fluxcd.io/v1beta3
+kind: Alert
+metadata:
+  name: loki
+  namespace: flux-system
+spec:
+  summary: "Cluster: ${CLUSTER_NAME}, App: loki"
+  providerRef:
+    name: slack
+  eventSeverity: info
+  eventSources:
+    - kind: Kustomization
+      name: infra-loki
+      namespace: flux-system
+    - kind: HelmRelease
+      name: loki
+      namespace: flux-system

@@ -223,4 +223,109 @@ spec:
   postBuild:
     substitute:
       CLUSTER_NAME: "green"
-
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: infra-kube-prometheus-stack
+  namespace: flux-system
+spec:
+  interval: 1h
+  retryInterval: 1m
+  timeout: 5m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./infrastructure/base/observability/kube-prometheus-stack
+  prune: true
+  wait: true
+  postBuild:
+    substitute:
+      CLUSTER_NAME: "green"
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: infra-prometheus-adapter
+  namespace: flux-system
+spec:
+  dependsOn:
+  - name: infra-kube-prometheus-stack
+  interval: 1h
+  retryInterval: 1m
+  timeout: 5m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./infrastructure/base/observability/prometheus-adapter
+  prune: true
+  wait: true
+  postBuild:
+    substitute:
+      CLUSTER_NAME: "green"
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: infra-loki
+  namespace: flux-system
+spec:
+  dependsOn:
+  - name: infra-kube-prometheus-stack
+  interval: 1h
+  retryInterval: 1m
+  timeout: 5m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./infrastructure/base/observability/loki
+  prune: true
+  wait: true
+  postBuild:
+    substitute:
+      CLUSTER_NAME: "green"
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: infra-alloy
+  namespace: flux-system
+spec:
+  dependsOn:
+  - name: infra-kube-prometheus-stack
+  - name: infra-loki
+  interval: 1h
+  retryInterval: 1m
+  timeout: 5m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./infrastructure/base/observability/alloy
+  prune: true
+  wait: true
+  postBuild:
+    substitute:
+      CLUSTER_NAME: "green"
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: infra-grafana
+  namespace: flux-system
+spec:
+  dependsOn:
+  - name: infra-kube-prometheus-stack
+  - name: infra-loki
+  - name: infra-ingress-controller
+  interval: 1h
+  retryInterval: 1m
+  timeout: 5m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./infrastructure/base/observability/grafana
+  prune: true
+  wait: true
+  postBuild:
+    substitute:
+      CLUSTER_NAME: "green"

@@ -1,0 +1,82 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: grafana
+  namespace: flux-system
+spec:
+  interval: 1h
+  url: https://grafana.github.io/helm-charts
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta2
+kind: HelmRelease
+metadata:
+  name: alloy
+  namespace: flux-system
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: alloy
+      version: "*"
+      sourceRef:
+        kind: HelmRepository
+        name: grafana
+      interval: 1h
+  releaseName: alloy
+  targetNamespace: observability
+  values:
+    alloy:
+      configMap:
+        content: |
+          discovery.kubernetes "pods" {
+            role = "pod"
+          }
+
+          discovery.relabel "pods" {
+            targets = discovery.kubernetes.pods.targets
+
+            rule {
+              source_labels = ["__meta_kubernetes_namespace"]
+              target_label  = "namespace"
+            }
+
+            rule {
+              source_labels = ["__meta_kubernetes_pod_name"]
+              target_label  = "pod"
+            }
+
+            rule {
+              source_labels = ["__meta_kubernetes_pod_container_name"]
+              target_label  = "container"
+            }
+          }
+
+          loki.source.kubernetes "pods" {
+            targets    = discovery.relabel.pods.output
+            forward_to = [loki.write.default.receiver]
+          }
+
+          loki.write "default" {
+            endpoint {
+              url = "http://loki.observability:3100/loki/api/v1/push"
+            }
+          }
+---
+apiVersion: notification.toolkit.fluxcd.io/v1beta3
+kind: Alert
+metadata:
+  name: alloy
+  namespace: flux-system
+spec:
+  summary: "Cluster: ${CLUSTER_NAME}, App: alloy"
+  providerRef:
+    name: slack
+  eventSeverity: info
+  eventSources:
+    - kind: Kustomization
+      name: infra-alloy
+      namespace: flux-system
+    - kind: HelmRelease
+      name: alloy
+      namespace: flux-system
