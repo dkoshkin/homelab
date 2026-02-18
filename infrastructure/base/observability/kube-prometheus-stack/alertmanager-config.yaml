@@ -1,0 +1,36 @@
+---
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: AlertmanagerConfig
+metadata:
+  name: slack-alertmanager-config
+  namespace: observability
+spec:
+  route:
+    receiver: slack
+    groupBy: ['alertname', 'namespace']
+    groupWait: 30s
+    groupInterval: 5m
+    repeatInterval: 4h
+    routes:
+      - receiver: 'null'
+        matchers:
+          - name: alertname
+            value: Watchdog
+            matchType: "="
+  receivers:
+    - name: 'null'
+    - name: slack
+      slackConfigs:
+        - sendResolved: true
+          channel: '#dimitris-homelab'
+          apiURL:
+            name: alertmanager-slack-webhook
+            key: webhook-url
+          title: '{{ .GroupLabels.alertname }}'
+          text: |-
+            {{ range .Alerts }}
+            *Alert:* {{ .Labels.alertname }}
+            *Severity:* {{ .Labels.severity }}
+            *Namespace:* {{ .Labels.namespace }}
+            *Description:* {{ .Annotations.description }}
+            {{ end }}

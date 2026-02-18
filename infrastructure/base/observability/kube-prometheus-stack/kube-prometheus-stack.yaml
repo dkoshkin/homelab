@@ -25,6 +25,17 @@ spec:
       enabled: false
       forceDeployDashboards: true
     alertmanager:
+      ingress:
+        enabled: true
+        ingressClassName: public
+        annotations:
+          cert-manager.io/cluster-issuer: selfsigned-ca
+        hosts:
+          - alertmanager.homelab.dimitrikoshkin.com
+        tls:
+          - secretName: alertmanager.homelab.dimitrikoshkin.com-tls
+            hosts:
+              - alertmanager.homelab.dimitrikoshkin.com
       alertmanagerSpec:
         storage:
           volumeClaimTemplate:
@@ -34,6 +45,8 @@ spec:
               resources:
                 requests:
                   storage: 5Gi
+        alertmanagerConfiguration:
+          name: slack-alertmanager-config
     prometheus-node-exporter:
       prometheus:
         monitor:
