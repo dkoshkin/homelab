@@ -1,0 +1,19 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: teslamate-backup-alerts
+  namespace: teslamate
+  labels:
+    release: kube-prometheus-stack
+spec:
+  groups:
+    - name: teslamate-backup
+      rules:
+        - alert: TeslamateBackupJobFailed
+          expr: kube_job_status_failed{namespace="teslamate", job_name=~"teslamate-backup.*"} > 0
+          for: 0m
+          labels:
+            severity: warning
+          annotations:
+            description: "Teslamate backup job {{ $labels.job_name }} has failed."

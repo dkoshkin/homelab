@@ -13,3 +13,4 @@ resources:
   - teslamate-release.yaml
   - teslamate-flux-alert.yaml
   - postgresql-cluster.yaml
+  - teslamate-backup-alert-rule.yaml
