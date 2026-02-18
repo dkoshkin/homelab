@@ -60,6 +60,17 @@ spec:
             - sourceLabels: [__meta_kubernetes_pod_node_name]
               targetLabel: node
     prometheus:
+      ingress:
+        enabled: true
+        ingressClassName: public
+        annotations:
+          cert-manager.io/cluster-issuer: selfsigned-ca
+        hosts:
+          - prometheus.homelab.dimitrikoshkin.com
+        tls:
+          - secretName: prometheus.homelab.dimitrikoshkin.com-tls
+            hosts:
+              - prometheus.homelab.dimitrikoshkin.com
       prometheusSpec:
         retention: "15d"
         storageSpec:
