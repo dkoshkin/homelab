@@ -30,7 +30,7 @@ spec:
             )
           nodeQuery: |
             sum by (<<.GroupBy>>) (
-              1 - rate(node_cpu_seconds_total{mode="idle"}[3m])
+              1 - rate(node_cpu_seconds_total{mode="idle", <<.LabelMatchers>>}[3m])
             )
           resources:
             overrides:

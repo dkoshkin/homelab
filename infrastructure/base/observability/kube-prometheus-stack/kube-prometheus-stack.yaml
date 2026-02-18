@@ -34,6 +34,12 @@ spec:
               resources:
                 requests:
                   storage: 5Gi
+    prometheus-node-exporter:
+      prometheus:
+        monitor:
+          relabelings:
+            - sourceLabels: [__meta_kubernetes_pod_node_name]
+              targetLabel: node
     prometheus:
       prometheusSpec:
         retention: "15d"
