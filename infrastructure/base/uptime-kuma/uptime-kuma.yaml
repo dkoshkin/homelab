@@ -38,14 +38,14 @@ spec:
       annotations:
         cert-manager.io/cluster-issuer: letsencrypt-cloudflare
       hosts:
-        - host: monitor-${CLUSTER_NAME}-apps.dimitrikoshkin.com
+        - host: uptime.homelab.dimitrikoshkin.com
           paths:
             - path: /
               pathType: Prefix
       tls:
-        - secretName: monitor-${CLUSTER_NAME}-apps.dimitrikoshkin.com-tls
+        - secretName: uptime.homelab.dimitrikoshkin.com-tls
           hosts:
-            - monitor-${CLUSTER_NAME}-apps.dimitrikoshkin.com
+            - uptime.homelab.dimitrikoshkin.com
 ---
 apiVersion: notification.toolkit.fluxcd.io/v1beta3
 kind: Alert

@@ -47,7 +47,7 @@ spec:
               scheme: https
               permanent: true
     service:
-      type: "${ingress_service_type:=LoadBalancer}"
+      type: "LoadBalancer"
 ---
 apiVersion: notification.toolkit.fluxcd.io/v1beta2
 kind: Alert

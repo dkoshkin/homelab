@@ -46,14 +46,14 @@ spec:
       annotations:
         cert-manager.io/cluster-issuer: letsencrypt-cloudflare
       hosts:
-      - host: gitops-${CLUSTER_NAME}.dimitrikoshkin.com
+      - host: flux.homelab.dimitrikoshkin.com
         paths:
         - path: /
           pathType: ImplementationSpecific
       tls:
-      - secretName: gitops-${CLUSTER_NAME}.dimitrikoshkin.com-tls
+      - secretName: flux.homelab.dimitrikoshkin.com-tls
         hosts:
-        - gitops-${CLUSTER_NAME}.dimitrikoshkin.com
+        - flux.homelab.dimitrikoshkin.com
 ---
 apiVersion: notification.toolkit.fluxcd.io/v1beta2
 kind: Alert

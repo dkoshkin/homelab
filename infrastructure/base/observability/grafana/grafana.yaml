@@ -53,7 +53,7 @@ spec:
       enabled: true
       ingressClassName: public
       annotations:
-        cert-manager.io/cluster-issuer: selfsigned-ca
+        cert-manager.io/cluster-issuer: letsencrypt-cloudflare
       hosts:
         - grafana.homelab.dimitrikoshkin.com
       tls:
