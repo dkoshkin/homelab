@@ -24,3 +24,14 @@ Its managing the following infrastructure and applications:
   * [Teslamate](https://docs.teslamate.org/docs/installation/docker) - Tesla vehicle data logging, using a custom [Teslamate Helm Chart](https://github.com/dkoshkin/teslamate-helm-chart)
   * [ASP Fantasy](https://github.com/dkoshkin/asp-fantasy) - Custom application with image automation
   * [Lovenotes](https://github.com/dkoshkin/lovenotes) - Custom application with image automation
+
+## Setup Guides
+
+Additional READMEs with setup instructions for bootstrapping and secrets management:
+
+* [Cluster Bootstrap](kubernetes/clusters/README.md) - Flux bootstrap, Slack notifications, and shared sealed secrets setup
+* [Observability](infrastructure/base/observability/README.md) - Alertmanager Slack webhook sealed secret setup
+* [PostgreSQL](apps/green/postgresql/README.md) - CloudNativePG user credentials sealed secret setup
+* [Teslamate](apps/green/teslamate/README.md) - Sealed secrets for encryption key, admin auth, PostgreSQL, and S3 backups
+* [ASP Fantasy](apps/green/asp-fantasy/README.md) - Basic auth sealed secret setup
+* [Lovenotes](apps/green/lovenotes/README.md) - Basic auth sealed secret setup

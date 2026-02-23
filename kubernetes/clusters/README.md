@@ -123,11 +123,3 @@ kubeseal --fetch-cert --controller-namespace flux-system --controller-name seale
         --cert=$SEALED_SECRET_CERT \
         > $CLUSTER_SEALED_SECRETS_DIR/weave-gitops-cluster-user-auth.yaml
     ```
-
-## Apps
-
-Follow instructions in the application READMEs to create ohter Secrets and application specific logic.
-
-* [PostgreSQL](../../apps/green/postgresql/README.md)
-* [Teslamate](../../apps/green/teslamate/README.md)
-* [Lovenotes](../../apps/green/lovenotes/README.md)
