@@ -45,6 +45,7 @@ kind: Ingress
 metadata:
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-cloudflare
+    traefik.ingress.kubernetes.io/router.middlewares: asp-fantasy-asp-fantasy-basic-auth@kubernetescrd
   labels:
     app.kubernetes.io/name: asp-fantasy
   name: asp-fantasy

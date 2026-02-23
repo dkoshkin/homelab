@@ -4,7 +4,9 @@ resources:
   - namespace.yaml
   - asp-fantasy.yaml
   - asp-fantasy-alert.yaml
+  - asp-fantasy-basic-auth-middleware.yaml
   - asp-fantasy-user.yaml
   - image-policy.yaml
   - image-repository.yaml
   - image-update-automation.yaml
+  - secret-asp-fantasy-admin-auth.yaml

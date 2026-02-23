@@ -1,0 +1,9 @@
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: asp-fantasy-basic-auth
+  namespace: asp-fantasy
+spec:
+  basicAuth:
+    secret: asp-fantasy-admin-auth
