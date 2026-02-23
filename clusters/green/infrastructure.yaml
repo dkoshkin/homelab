@@ -12,7 +12,7 @@ spec:
     kind: GitRepository
     name: flux-system
   path: ./infrastructure/base/local-path-provisioner
-  prune: true
+  prune: false
   wait: true
   postBuild:
     substitute:
@@ -50,7 +50,7 @@ spec:
     kind: GitRepository
     name: flux-system
   path: ./infrastructure/base/metallb
-  prune: true
+  prune: false
   wait: true
   postBuild:
     substitute:
@@ -71,7 +71,7 @@ spec:
     kind: GitRepository
     name: flux-system
   path: ./infrastructure/base/metallb-config
-  prune: true
+  prune: false
   wait: true
   postBuild:
     substitute:
@@ -111,7 +111,7 @@ spec:
     kind: GitRepository
     name: flux-system
   path: ./infrastructure/base/cert-manager
-  prune: true
+  prune: false
   wait: true
   postBuild:
     substitute:
@@ -132,7 +132,7 @@ spec:
     kind: GitRepository
     name: flux-system
   path: ./infrastructure/base/cert-issuers
-  prune: true
+  prune: false
   wait: true
   postBuild:
     substitute:
@@ -154,7 +154,7 @@ spec:
     kind: GitRepository
     name: flux-system
   path: ./infrastructure/base/flux-dashboard
-  prune: true
+  prune: false
   wait: true
   postBuild:
     substitute:
@@ -218,7 +218,7 @@ spec:
     kind: GitRepository
     name: flux-system
   path: ./infrastructure/base/uptime-kuma
-  prune: true
+  prune: false
   wait: true
   postBuild:
     substitute:
