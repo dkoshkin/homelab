@@ -61,6 +61,24 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
 metadata:
+  name: apps-interactions
+  namespace: flux-system
+spec:
+  interval: 10m0s
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./apps/green/interactions
+  prune: true
+  wait: true
+  timeout: 5m0s
+  postBuild:
+    substitute:
+      CLUSTER_NAME: "green"
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
   name: apps-lovenotes
   namespace: flux-system
 spec:
