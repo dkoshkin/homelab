@@ -1,0 +1,20 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: interactions-db
+  namespace: interactions
+spec:
+  instances: 1
+  bootstrap:
+    initdb:
+      database: interactions
+      owner: interactions
+  storage:
+    size: 5Gi
+  resources:
+    requests:
+      memory: 256Mi
+      cpu: 100m
+    limits:
+      memory: 512Mi
+      cpu: 500m

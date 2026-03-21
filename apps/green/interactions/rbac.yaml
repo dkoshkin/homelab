@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: interactions-admin
+  namespace: interactions
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: interactions-admin-token
+  namespace: interactions
+  annotations:
+    kubernetes.io/service-account.name: interactions-admin
+type: kubernetes.io/service-account-token
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: interactions-admin-binding
+  namespace: interactions
+subjects:
+  - kind: ServiceAccount
+    name: interactions-admin
+    namespace: interactions
+roleRef:
+  kind: ClusterRole
+  name: admin
+  apiGroup: rbac.authorization.k8s.io

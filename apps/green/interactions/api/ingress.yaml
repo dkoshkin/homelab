@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: interactions-api
+  namespace: interactions
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-cloudflare
+  labels:
+    app.kubernetes.io/name: interactions-api
+spec:
+  ingressClassName: public
+  rules:
+    - host: interactions-api.dimitrikoshkin.com
+      http:
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: interactions-api
+                port:
+                  number: 80
+  tls:
+    - hosts:
+        - interactions-api.dimitrikoshkin.com
+      secretName: interactions-api.dimitrikoshkin.com-tls
