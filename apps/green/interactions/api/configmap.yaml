@@ -1,0 +1,67 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: interactions-script
+  namespace: interactions
+data:
+  server.py: |
+    import os
+    import json
+    import psycopg2
+    from http.server import HTTPServer, BaseHTTPRequestHandler
+
+    DATABASE_URL = os.environ["DATABASE_URL"]
+
+    def get_db():
+        return psycopg2.connect(DATABASE_URL)
+
+    def init_db():
+        conn = get_db()
+        cur = conn.cursor()
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS interactions (
+                id SERIAL PRIMARY KEY,
+                name TEXT NOT NULL,
+                email TEXT NOT NULL,
+                message TEXT NOT NULL,
+                created_at TIMESTAMPTZ DEFAULT NOW()
+            )
+        """)
+        cur.execute("""
+            INSERT INTO interactions (name, email, message) VALUES
+                ('Alice Smith',  'alice@example.com', 'Hello from the first interaction!'),
+                ('Bob Jones',    'bob@example.com',   'Checking in on the system.'),
+                ('Carol White',  'carol@example.com', 'Looks great so far.')
+            ON CONFLICT DO NOTHING
+        """)
+        conn.commit()
+        cur.close()
+        conn.close()
+
+    class Handler(BaseHTTPRequestHandler):
+        def do_GET(self):
+            if self.path == "/healthz":
+                self.send_response(200)
+                self.end_headers()
+                self.wfile.write(b"ok")
+                return
+
+            conn = get_db()
+            cur = conn.cursor()
+            cur.execute("SELECT id, name, email, message, created_at FROM interactions ORDER BY created_at DESC")
+            rows = [{"id": r[0], "name": r[1], "email": r[2], "message": r[3], "created_at": str(r[4])} for r in cur.fetchall()]
+            cur.close()
+            conn.close()
+
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.end_headers()
+            self.wfile.write(json.dumps(rows).encode())
+
+        def log_message(self, format, *args):
+            pass
+
+    if __name__ == "__main__":
+        init_db()
+        print("starting server on :8080")
+        HTTPServer(("", 8080), Handler).serve_forever()
